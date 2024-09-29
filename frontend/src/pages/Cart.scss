@@ -1,0 +1,25 @@
+.cart_area {
+  .media {
+    img {
+      width: 150px;
+      height: 150px;
+    }
+  }
+  input[type="radio"] {
+    width: 16px !important;
+    height: 25px !important;
+  }
+  .shipping_box {
+    ul.list li {
+      justify-content: space-between;
+      margin-left: 6rem;
+    }
+  }
+  h5.total {
+    width: 76px;
+  }
+  i.fa-trash-can {
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+}

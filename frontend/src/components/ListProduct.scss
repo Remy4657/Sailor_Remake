@@ -1,0 +1,16 @@
+// @import url("./listProductCss/_predefine.scss");
+// @import url("./listProductCss//main.css");
+// @import url("./listProductCss//owl.carousel.css");
+.active-pagination a{
+    background-color: #fd7e14 !important;
+}
+ul.main-categories li.active{
+    background: linear-gradient(90deg, #ffba00 0%, #ff6c00 100%);
+}
+.filter-bar .sorting, .filter-bar ul{
+    flex: 1;
+}
+.filter-bar ul{
+    justify-content: end;
+}
+

@@ -1,0 +1,56 @@
+header {
+  display: flex;
+  flex-direction: column;
+}
+.search {
+  margin-left: 2rem;
+}
+.cart {
+  margin-left: 1rem;
+}
+.search,
+.cart {
+  cursor: pointer;
+}
+
+input[type="text"].input-search {
+  margin-top: 1rem;
+  margin-left: 55rem;
+  margin-bottom: 0rem;
+  width: 33rem;
+  padding: 5px 5px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  display: none;
+}
+input[type="text"].input-search.show {
+  display: block;
+}
+input[type="text"].input-search.hidden {
+  display: none;
+}
+li.cart{
+  position: relative;
+}
+li.cart a span{
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  
+}
+// li ul.account_dropdown {
+//   display: none;
+// }
+// li ul.account_dropdown li a {
+//   position: fixed;
+//   z-index: 1;
+//   right: 7rem;
+//   top: 3.5rem;
+//   background-color: #000;
+//   color: #fff;
+// }
+
+// li a.getstarted.dropdown:hover + .account_dropdown {
+//   display: block;
+// }

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <title>Google SignIn</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:70px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- <div class="jumbotron text-center text-primary">
+        <h1><span class="fa fa-lock"></span> Social Authentication</h1>
+        <p>Login or Register with:</p>
+        <a href="/api/v1/auth/google" class="btn btn-danger"><span class="fa fa-google"></span> SignIn with Google</a>
+    </div> -->
+</div>
+<script>
+    // This function will run automatically when the page loads
+    window.onload = function() {
+        // console.log("Page loaded and action running.");
+        // Perform your action here, e.g., fetch data or show a message
+        window.location.href = "http://localhost:8080/api/v1/auth/google";
+    };
+</script>
+</body>
+</html> 

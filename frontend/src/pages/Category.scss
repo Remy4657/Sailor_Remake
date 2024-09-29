@@ -1,0 +1,27 @@
+
+ul.main-categories li {
+  cursor: pointer;
+}
+.filter-bar {
+  justify-content: space-between;
+  .filter-bar-control {
+    display: flex;
+    justify-content: space-between !important;
+  }
+}
+section.lattest-product-area.pb-40.category-list {
+  padding: 0;
+  .single-product {
+    margin-top: 0;
+  }
+}
+
+.category-product.container {
+  margin-top: 3rem;
+}
+.sorting.mr-auto {
+  select {
+    padding: 9px;
+    cursor: pointer;
+  }
+}
