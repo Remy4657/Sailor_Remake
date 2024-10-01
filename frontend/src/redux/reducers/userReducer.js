@@ -14,13 +14,13 @@ const INITIAL_STATE = {
         : [],
     cartAll: [],
     listProduct: [],
-    isLoading: false,
+    isLoading: true,
     isError: false,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_DATA_LOGIN:
+        case actionTypes.FETCHING_DATA:
             return {
                 ...state,
                 isLoading: true,
@@ -30,6 +30,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 auth: true,
+                isLoading: false,
                 role: action.user.Roles.name,
                 account: {
                     idAccount: action.user.id,
@@ -45,6 +46,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 isError: true,
+                isLoading: false,
+            };
+        case actionTypes.FETCH_FINISH:
+            return {
+                ...state,
+                isError: false,
                 isLoading: false,
             };
         case actionTypes.LOGOUT:
@@ -90,7 +97,6 @@ const userReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 listProduct: [...action.listProduct]
-
             };
         case actionTypes.INCREASE:
             //const productRemove = state.cart.find((x) => x.id === action.payload.id)

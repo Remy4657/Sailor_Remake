@@ -268,8 +268,8 @@ const Cart = () => {
 
                                     </td>
                                     <td>
-                                        <div className="checkout_btn_inner d-flex align-items-center">
-                                            <a className="gray_btn" href="#">Continue Shopping</a>
+                                        <div className="checkout_btn_inner d-flex align-items-center justify-content-between">
+                                            <a className="gray_btn px-3" href="#">Continue Shopping</a>
                                             <div onClick={(e) => handleProceed(e)}>
                                                 <Link className="primary-btn" to="/checkout" >Proceed to checkout</Link>
                                             </div>

@@ -18,6 +18,15 @@ const Header = () => {
     const listProduct = useSelector((state) => state.user.listProduct);
     const cart = useSelector(state => state.user.cart)
     const refListProduct = useRef()
+    const defaultFocusList = {
+        isFocusHome: true,
+        isShop: false,
+        isFocusAbout: false,
+        isFocusContact: false,
+        isFocusBlog: false,
+        isFocusCart: false,
+    }
+    const [focusList, setFocusList] = useState(defaultFocusList)
 
     // when refresh => get user info was saved at session to avoid lost info user
     useEffect(() => {
@@ -64,6 +73,17 @@ const Header = () => {
 
         }
     }
+    const handleFocusClick = (field) => {
+        setFocusList({
+            isFocusHome: false,
+            isShop: false,
+            isFocusAbout: false,
+            isFocusContact: false,
+            isFocusBlog: false,
+            isFocusCart: false,
+            [field]: true
+        })
+    }
 
     return (
         <div>
@@ -71,34 +91,34 @@ const Header = () => {
                 <header id="header" className="fixed-top d-flex align-items-center">
                     <div className="container d-flex align-items-center">
 
-                        <h1 className="logo me-auto"><a href="#">Sailor</a></h1>
+                        <h1 className="logo me-auto"><Link to="#">Sailor</Link></h1>
 
-                        <a href="index.html" className="logo me-auto"><img src="../assets/img/logo.png" alt="" className="img-fluid" /></a>
+                        <Link to="index.html" className="logo me-auto"><img src="../assets/img/logo.png" alt="" className="img-fluid" /></Link>
 
                         <nav id="navbar" className="navbar">
                             <ul>
                                 <li>
-                                    <Link className="active" to="/">HOME</Link>
+                                    <Link className={focusList.isFocusHome ? "active" : ""} to="/" onClick={() => handleFocusClick("isFocusHome")}>HOME</Link>
 
                                 </li>
 
-                                <li className="dropdown"><a href="#"><span>SHOP</span> <i className="fa-solid fa-chevron-down"></i></a>
+                                <li className="dropdown"><Link to="#" className={focusList.isShop ? "active" : ""}><span>SHOP</span> <i className="fa-solid fa-chevron-down"></i></Link>
                                     <ul>
-                                        <li><Link to="/category">SHOP CATEGORY</Link></li>
-                                        <li className="dropdown"><a href="#"><span>Deep Drop Down</span> <i className="bi bi-chevron-right"></i></a>
+                                        <li><Link to="/category" className={focusList.isShop ? "active" : ""} onClick={() => handleFocusClick("isShop")}>SHOP CATEGORY</Link></li>
+                                        <li className="dropdown"><Link to="#"><span>Deep Drop Down</span> <i className="bi bi-chevron-right"></i></Link>
                                             <ul>
-                                                <li><a href="#">Deep Drop Down 1</a></li>
-                                                <li><a href="#">Deep Drop Down 2</a></li>
-                                                <li><a href="#">Deep Drop Down 3</a></li>
-                                                <li><a href="#">Deep Drop Down 4</a></li>
-                                                <li><a href="#">Deep Drop Down 5</a></li>
+                                                <li><Link to="#">Deep Drop Down 1</Link></li>
+                                                <li><Link to="#">Deep Drop Down 2</Link></li>
+                                                <li><Link to="#">Deep Drop Down 3</Link></li>
+                                                <li><Link to="#">Deep Drop Down 4</Link></li>
+                                                <li><Link to="#">Deep Drop Down 5</Link></li>
                                             </ul>
                                         </li>
                                     </ul>
                                 </li>
-                                <li><Link href="/about">ABOUT</Link></li>
-                                <li><Link to="/blog">BLOG</Link></li>
-                                <li><Link to="/contact">CONTACT</Link></li>
+                                <li><Link to="/about" className={focusList.isFocusAbout ? "active" : ""} onClick={() => handleFocusClick("isFocusAbout")}>ABOUT</Link></li>
+                                <li><Link to="/blog" className={focusList.isFocusBlog ? "active" : ""} onClick={() => handleFocusClick("isFocusBlog")}>BLOG</Link></li>
+                                <li><Link to="/contact" className={focusList.isFocusContact ? "active" : ""} onClick={() => handleFocusClick("isFocusContact")}>CONTACT</Link></li>
                                 <li className="search"><i className="fa-solid fa-magnifying-glass"
                                     onClick={() => {
                                         fetchProducts()
@@ -106,7 +126,7 @@ const Header = () => {
 
                                     }}></i></li>
                                 <li className="cart">
-                                    <Link to="/cart">
+                                    <Link to="/cart" className={focusList.isFocusCart ? "active" : ""} onClick={() => handleFocusClick("isFocusCart")}>
                                         <i className="fa-solid fa-cart-shopping"></i>
                                         <span>{isAuth && cart.length}</span>
                                     </Link>

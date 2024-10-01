@@ -31,9 +31,10 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { fetchCart, fetchAllCart } from "./service/cartService"
 import _ from 'lodash'
 import { useDispatch, useSelector } from "react-redux"
-import { INITIAL_CART_REDUX, INITIAL_CARTALL_REDUX, FETCH_DATA_SUCCESS } from "./redux/actions/action"
+import { INITIAL_CART_REDUX, INITIAL_CARTALL_REDUX, FETCH_DATA_SUCCESS, FETCH_FINISH } from "./redux/actions/action"
 import { refresh } from "./service/userService";
 import Pagination from "./components/Pagination";
+import BounceLoader from "react-spinners/BounceLoader";
 
 
 
@@ -42,7 +43,7 @@ function App() {
   const location = useLocation()
   const { search } = useLocation();
   const idAccount = useSelector(state => state.user.account.idAccount)
-  const role = useSelector(state => state.user.role)
+  const isLoading = useSelector(state => state.user.isLoading)
   const dispatch = useDispatch()
 
   const nonSecurePaths = ['/register'] // khais bao nhung trang nao khi refresh maf chua login thif da ve trang login
@@ -82,12 +83,19 @@ function App() {
     }
   }
   useEffect(() => {
+
     // sendIdAccount()
     // if (!username) {
     //   navigate("/login?redirect=/cart")
     // }
     handleRefresh()
-    fetchCartF()  // khi refresh ma khong fetch cart thif ko update dc so luong item hien o header vi init cart o hom no se chay truoc init cart o App.js nen khong co idaccount o trang home.js
+    fetchCartF()
+    // khi refresh ma khong fetch cart thif ko update dc so luong item hien o header vi 
+    //init cart o home no se chay truoc init cart o App.js nen khong co idaccount o trang home.js
+    setTimeout(() => {
+      dispatch(FETCH_FINISH())
+
+    }, 2000)
   }, [idAccount])
 
   // const sendIdAccount = async () => {
@@ -100,7 +108,6 @@ function App() {
     let tt = 0
     a = []
     if (resCart && resCart.data.DT) {
-      // dispatch(INITIAL_CARTALL_REDUX(resCart.data.DT))
       resCart.data.DT.map((item, index) => {
         if (item.Products.name != null && item.User.id != null) {
           a.push(item)
@@ -119,36 +126,48 @@ function App() {
 
   return (
     <div className="">
+      {isLoading ?
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+          <BounceLoader
+            color="rgba(244, 182, 43, 0.95)"
+            cssOverride={{}}
+            loading={isLoading}
+            margin={2}
+            size={100}
+            speedMultiplier={1}
+          />
+        </div>
 
-      <div>
-        {!isAdminRoute &&
-          <Header />}
-        <Routes>
-          <Route exact path="/blog" element={<Blog />} />
-          <Route exact path="/thank-you" element={<ConfirmPayment />} />
-          <Route exact path="/cart" element={<Cart />} />
-          <Route exact path="/checkout" element={<Checkout />} />
-          <Route exact path="/category" element={<Category />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route exact path="/product/detail/:id" element={<ProductDetail />} />
-          <Route exact path='/login' element={<UserRoute />}>
-            <Route exact path="/login" element={<Login />} />
-          </Route>
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/pa" element={<Pagination />} />
-          {/* admin */}
-          <Route exact path="/admin/login" element={<AdminLogin />} />
+        :
+        <div>
+          {!isAdminRoute &&
+            <Header />}
+          <Routes>
+            <Route exact path="/blog" element={<Blog />} />
+            <Route exact path="/thank-you" element={<ConfirmPayment />} />
+            <Route exact path="/cart" element={<Cart />} />
+            <Route exact path="/checkout" element={<Checkout />} />
+            <Route exact path="/category" element={<Category />} />
+            <Route exact path="/register" element={<Register />} />
+            <Route exact path="/product/detail/:id" element={<ProductDetail />} />
+            <Route exact path='/login' element={<UserRoute />}>
+              <Route exact path="/login" element={<Login />} />
+            </Route>
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/pa" element={<Pagination />} />
+            {/* admin */}
+            <Route exact path="/admin/login" element={<AdminLogin />} />
+            <Route exact path='/admin/dashboard' element={<AdminRoute />}>
+              <Route exact path="/admin/dashboard" element={<Dashboard />} />
+            </Route>
+            <Route exact path="/admin/product" element={<Product />} />
 
-          <Route exact path='/admin/dashboard' element={<AdminRoute />}>
-            <Route exact path="/admin/dashboard" element={<Dashboard />} />
-          </Route>
-          <Route exact path="/admin/product" element={<Product />} />
+          </Routes>
+          {!isAdminRoute && <Footer />}
+        </div>}
 
-        </Routes>
-        {!isAdminRoute && <Footer />}
-      </div>
 
       <div>
 

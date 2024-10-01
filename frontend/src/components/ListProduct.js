@@ -201,7 +201,7 @@ const ListProduct = () => {
                                         <div id="lower-value">
                                             <input type='number' className='form-control' value={price.start} onChange={(e) => PriceOnchange(e)} name='start' />
                                         </div>
-                                        <div className="connect"> - </div>
+                                        <div className="connect"><span className=''><b>-</b></span></div>
                                         <div id="upper-value">
                                             <input type='number' className='form-control' value={price.end} onChange={(e) => PriceOnchange(e)} name='end' />
                                         </div>
@@ -246,7 +246,7 @@ const ListProduct = () => {
                                         <option value="12">Show 12</option>
                                     </select>
                                     <div className='ms-3 d-flex'>
-                                        <p style={{ margin: "auto" }}>{itemPerPage * page + 1}-{itemPerPage * (page + 1)} of 30 items</p>
+                                        <p style={{ margin: "auto" }}>{itemPerPage * page + 1}-{itemPerPage * page + filterData.length} of {listProduct.length} items</p>
                                     </div>
                                 </div>
                                 <ReactPaginate

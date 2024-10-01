@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import {
-    FETCH_DATA_LOGIN,
+    FETCHING_DATA,
     FETCH_DATA_SUCCESS,
     FETCH_DATA_ERROR,
 } from "../../redux/actions/action";
@@ -24,7 +24,7 @@ const AdminLogin = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
-        dispatch(FETCH_DATA_LOGIN());
+        dispatch(FETCHING_DATA());
         let res = await userLogin({ username, password })
 
         if (res && res && +res.EC === 1) {

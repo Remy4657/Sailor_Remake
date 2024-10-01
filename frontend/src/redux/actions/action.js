@@ -1,8 +1,8 @@
 import * as actionTypes from "./type";
 
-export const FETCH_DATA_LOGIN = () => {
+export const FETCHING_DATA = () => {
     return {
-        type: actionTypes.FETCH_DATA_LOGIN,
+        type: actionTypes.FETCHING_DATA,
     };
 };
 export const FETCH_DATA_SUCCESS = (user) => {
@@ -14,6 +14,11 @@ export const FETCH_DATA_SUCCESS = (user) => {
 export const FETCH_DATA_ERROR = () => {
     return {
         type: actionTypes.FETCH_DATA_ERROR,
+    };
+};
+export const FETCH_FINISH = () => {
+    return {
+        type: actionTypes.FETCH_FINISH,
     };
 };
 

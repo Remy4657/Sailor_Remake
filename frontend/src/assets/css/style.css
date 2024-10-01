@@ -125,7 +125,9 @@ h6 {
 .navbar {
   padding: 0;
 }
-
+ul.main-categories{
+  padding-left: 0px;
+}
 .navbar ul {
   margin: 0;
   padding: 0;

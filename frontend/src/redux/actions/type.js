@@ -1,4 +1,4 @@
-export const FETCH_DATA_LOGIN = "FETCH_DATA_LOGIN";
+export const FETCHING_DATA = "FETCHING_DATA";
 export const FETCH_DATA_ERROR = "FETCH_DATA_ERROR";
 export const FETCH_DATA_SUCCESS = "FETCH_DATA_SUCCESS";
 export const USER_LOGIN = "USER_LOGIN";
@@ -11,3 +11,4 @@ export const DECREASE = "DECREASE";
 export const DELETE_CART = "DELETE_CART";
 export const ADD_TO_CART = "ADD_TO_CART";
 export const SET_CART = "SET_CART";
+export const FETCH_FINISH = "FETCH_FINISH"
