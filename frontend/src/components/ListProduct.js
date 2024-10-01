@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './owl.carousel.css'
 import './ListProduct.scss'
-import Product from './Product'
+import Product from './Products'
 import ReactPaginate from "react-paginate";
 import '../service/productService'
 import { fetchAllProduct } from '../service/productService'
@@ -57,6 +57,7 @@ const ListProduct = () => {
         e.preventDefault()
         setPage(0)
         setListProduct(listProductRedux)
+        setPrice({ start: "", end: "" })
         setTypeProduct("all")
     }
     const handleClickAdidas = (e) => {
@@ -235,15 +236,18 @@ const ListProduct = () => {
 				        <!-- Start Filter Bar --> */}
                         {filterData.length > 0 &&
                             <div className="filter-bar d-flex flex-wrap align-items-center">
-                                <div className="sorting mr-auto">
+                                <div className="sorting mr-auto d-flex">
                                     <select onChange={(e) => ItemPerPageOnchange(e)}>
                                         <option selected disabled value>
-                                            -- Items per page --
+                                            Show 8
                                         </option>
                                         <option value="6">Show 6</option>
                                         <option value="9">Show 9</option>
                                         <option value="12">Show 12</option>
                                     </select>
+                                    <div className='ms-3 d-flex'>
+                                        <p style={{ margin: "auto" }}>{itemPerPage * page + 1}-{itemPerPage * (page + 1)} of 30 items</p>
+                                    </div>
                                 </div>
                                 <ReactPaginate
                                     containerClassName={"pagination"}

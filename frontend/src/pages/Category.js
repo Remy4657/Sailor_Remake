@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 import './Category.scss'
 import { fetchAllProduct } from "../service/productService"
-import Product from "../components/Product"
 import ListProduct from "../components/ListProduct"
 
 const Category = () => {
@@ -27,28 +26,7 @@ const Category = () => {
 
         }
     }
-    const handleClickAdidas = (e) => {
-        e.preventDefault()
-        // cập nhật lại list product khi xong moi lan lap, de lap tren list product do
-        setListProduct(listProductRedux)
-        const listProductAdidas = listProductRedux.filter(item => item.categoryId === 1)
-        setListProduct(listProductAdidas)
-    }
 
-    const handleClickNike = (e) => {
-        e.preventDefault()
-        // cập nhật lại list product khi xong moi lan lap, de lap tren list product do
-        setListProduct(listProductRedux)
-        const listProductNike = listProductRedux.filter(item => item.categoryId === 2)
-        setListProduct(listProductNike)
-    }
-    const handleClickPuma = (e) => {
-        e.preventDefault()
-        // cập nhật lại list product khi xong moi lan lap, de lap tren list product do
-        setListProduct(listProductRedux)
-        const listProductNike = listProductRedux.filter(item => item.categoryId === 3)
-        setListProduct(listProductNike)
-    }
 
     return (
         <>

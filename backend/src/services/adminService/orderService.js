@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 const createNewOrder = async (data) => {
 
     try {
-
         // if (data.name && data.image && data.price && data.priceOld && data.status && data.categoryId) {
         //     return {
         //         EM: "Empty something field",
@@ -13,9 +12,9 @@ const createNewOrder = async (data) => {
         //     };
         // }
 
-        await db.Order.create({ ...data })
+        await db.Orders.create({ ...data })
         return {
-            EM: 'Create new blog ok',
+            EM: 'Create new order ok',
             EC: 1,
             DT: []
         }
@@ -31,25 +30,20 @@ const createNewOrder = async (data) => {
 
 const updateOrder = async (data) => {
     try {
-        // if (!data.groupId) {
-        //     return {
-        //         EM: 'Not found group id',
-        //         EC: 0,
-        //         DT: 'group'
-        //     }
-        // }
-        let blog = await db.Order.findOne({
+        let order = await db.Orders.findOne({
             where: { id: data.id }
         })
-        if (blog) {
-            await blog.update({
-                name: data.name,
-                image: data.image,
-                content: data.content,
-
+        console.log("data update: ", data)
+        if (order) {
+            await order.update({
+                infoOrder: data.infoOrder,
+                totalMoney: data.totalMoney,
+                phone: data.phone,
+                email: data.email,
+                address: data.address,
             })
             return {
-                EM: 'Update blog succeed',
+                EM: 'Update order success',
                 EC: 1,
                 DT: []
             }
@@ -57,7 +51,7 @@ const updateOrder = async (data) => {
         else {
             //not found
             return {
-                EM: 'blog not find',
+                EM: 'order not found',
                 EC: 0,
                 DT: []
             }
@@ -65,7 +59,7 @@ const updateOrder = async (data) => {
     } catch (error) {
         console.log(error)
         return {
-            EM: 'something wrong from user',
+            EM: error,
             EC: -1,
             DT: []
         }
@@ -73,31 +67,21 @@ const updateOrder = async (data) => {
 }
 const deleteOrder = async (id) => {
     try {
-        // await db.User.destroy({
-        //     where: {
-        //         id: id,
-        //     },
-        // });
-        // return {
-        //     EM: 'delete user success',
-        //     EC: 0,
-        //     DT: []
-        // }
-        console.log('id xoa: ', id)
-        let blog = await db.Cart_Detail.findOne({
-            where: { CartId: id }
+
+        let order = await db.Orders.findOne({
+            where: { id: id }
         })
-        if (blog) {
-            await blog.destroy()
+        if (order) {
+            await order.destroy()
             return {
-                EM: 'delete blog success',
+                EM: 'delete order success',
                 EC: 0,
                 DT: []
             }
 
         } else {
             return {
-                EM: 'blog not exist',
+                EM: 'order not exist',
                 EC: 2,
                 DT: []
             }

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LOGOUT } from "../redux/actions/action";
 import { INITIAL_LIST_PRODUCT } from "../redux/actions/action";
 import './Header.scss'
@@ -17,6 +17,7 @@ const Header = () => {
     const username = useSelector((state) => state.user.account.username);
     const listProduct = useSelector((state) => state.user.listProduct);
     const cart = useSelector(state => state.user.cart)
+    const refListProduct = useRef()
 
     // when refresh => get user info was saved at session to avoid lost info user
     useEffect(() => {
@@ -49,7 +50,7 @@ const Header = () => {
     }
     const handleSearch = (e) => {
         if (e.key === "Enter") {
-            const filterListProduct = listProduct.filter(item => item.name.includes(valueSearch.toLocaleUpperCase()) === true || item.name.includes(valueSearch.toLowerCase()) === true)
+            const filterListProduct = refListProduct.current.filter(item => item.name.toLowerCase().includes(valueSearch.toLowerCase()) === true)
             dispatch(INITIAL_LIST_PRODUCT(filterListProduct))
         }
     }
@@ -57,7 +58,7 @@ const Header = () => {
         let res = await fetchAllProduct()
         //let res = await fetchAllUser()
         if (res && res.data.DT) {
-
+            refListProduct.current = res.data.DT
             // console.log('all data: ', res.data.DT)
             dispatch(INITIAL_LIST_PRODUCT(res.data.DT))
 

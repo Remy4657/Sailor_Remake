@@ -42,7 +42,7 @@ const getOrderAll = async () => {
         let order = await db.Orders.findAll({
 
 
-            attributes: ["infoOrder", "totalMoney", "phone", "email", "address"],
+            attributes: ["id", "infoOrder", "totalMoney", "phone", "email", "address"],
 
 
             raw: true,

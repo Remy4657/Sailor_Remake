@@ -22,7 +22,7 @@ const createFunc = async (req, res) => {
 }
 const updateFunc = async (req, res) => {
     try {
-
+        console.log("order update controller: ", req.body)
         let data = await orderService.updateOrder(req.body)
 
         return res.status(200).json({

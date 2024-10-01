@@ -12,7 +12,7 @@ const ModalDelete = (props) => {
                 <Modal.Header closeButton onClick={props.handleCloseModalDelete}>
                     <Modal.Title>Confirm delete user</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you confirm delete this product: {props.dataModalDelete ? props.dataModalDelete.email : ''}</Modal.Body>
+                <Modal.Body>Are you confirm delete this order: {props.dataModalDelete ? props.dataModalDelete.id : ''}</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={props.handleCloseModalDelete}>
                         No

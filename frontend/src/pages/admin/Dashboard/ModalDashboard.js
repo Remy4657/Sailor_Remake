@@ -5,33 +5,30 @@ import Modal from 'react-bootstrap/Modal';
 import _ from 'lodash'
 import { toast } from "react-toastify";
 
-import { fetchAllProduct } from '../../../service/admin/productService';
-import { createNewProduct } from '../../../service/admin/adminService';
-import { updateProduct } from '../../../service/admin/adminService';
+import { fetchAllOrder } from '../../../service/admin/adminService';
+import { createNewOrder } from '../../../service/admin/adminService';
+import { updateOrder } from '../../../service/admin/adminService';
 
 const ModalProduct = (props) => {
     const defaultUserData = {
-        name: '',
-        image: '',
-        price: '',
-        priceOld: '',
-        status: '',
-        categoryId: ''
+        infoOrder: '',
+        totalMoney: '',
+        phone: '',
+        email: '',
+        address: '',
     }
     const defaultValidUser = {
-        name: true,
-        image: true,
-        price: true,
-        priceOld: true,
-        status: true,
-        categoryId: true
+        infoOrder: true,
+        totalMoney: true,
+        phone: true,
+        email: true,
+        address: true,
     }
     const [userData, setUserData] = useState(defaultUserData)
     const [validInput, setValidInput] = useState(defaultValidUser)
-    const [categoryList, setCategoryList] = useState([])
-    const [categorySelected, setCategorySelected] = useState("")
-    const fetchGroup = async () => {
-        let response = await fetchAllProduct()
+
+    const funcFetchAllOrder = async () => {
+        let response = await fetchAllOrder()
         if (response && response.data.EC === 0) {
             //     setDataGroups(response.data.DT)
             //     // gan gia tri cho group khi khong chon group mà bam submit (neu khong gan thì gia tri group trong database la null)
@@ -42,14 +39,9 @@ const ModalProduct = (props) => {
         }
         // }
     }
-    const fetchCategory = async () => {
-        const res = await props.fetchAllCategory()
-        setCategoryList(res.data.DT)
-    }
-    useEffect(() => {
-        fetchGroup()
-        fetchCategory()
 
+    useEffect(() => {
+        funcFetchAllOrder()
     }, [])
 
     useEffect(() => {
@@ -73,9 +65,7 @@ const ModalProduct = (props) => {
         }
     }, [props.dataEdit])
 
-    const onSelectCategory = (e) => {
-        setCategorySelected(e.target.value)
-    }
+
 
     const handleChangeInput = (valueInput, nameInput) => {
         let _userData = _.cloneDeep(userData)
@@ -89,7 +79,7 @@ const ModalProduct = (props) => {
         }
         let check = true
         setValidInput(defaultValidUser)
-        let properties = ['name', 'image', 'price', 'priceOld', 'status', 'categoryId']
+        let properties = ['infoOrder', 'totalMoney', 'phone', 'email', 'address']
         for (let i = 0; i < properties.length; i++) {
             // kiem tra cac gia tri input tren neu ko có gia tri thì bao loi
             if (!userData[properties[i]]) {
@@ -104,15 +94,12 @@ const ModalProduct = (props) => {
         return check
     }
     const handleSave = async (userData) => {
-        userData["categoryId"] ? userData["categoryId"] = userData["categoryId"] : userData["categoryId"] = 1
-        alert(userData["categoryId"])
-
         let check = handleValidateInput()
         if (check === true) {
 
             //     // them thuoc tinh group id bang group de them groupID trong database
-            let res = props.action === 'Create' ? await createNewProduct({ ...userData })
-                : await updateProduct({ ...userData })
+            let res = props.action === 'Create' ? await createNewOrder({ ...userData })
+                : await updateOrder({ ...userData })
             if (res.data.EC === 0) {
                 let _defaultValidUser = _.cloneDeep(userData)
                 _defaultValidUser[res.data.DT] = false
@@ -122,7 +109,7 @@ const ModalProduct = (props) => {
             else {
                 toast.success(res.data.EM)
                 props.handleCloseModalCreate()
-                props.fetchProducts()
+                props.fetchOrder()
             }
         }
     }
@@ -144,64 +131,48 @@ const ModalProduct = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <div className='content-body row'>
-                        <div className='col-12 col-sm-6 form-group'>
-                            <label>Name: </label>
-                            <input
-                                className={validInput.name ? 'form-control' : 'form-control is-invalid'}
-                                type="text"
-                                onChange={(e) => handleChangeInput(e.target.value, 'name')}
-                                value={userData.name}
-
-                            />
-                        </div>
-                        <div className='col-12 col-sm-6 form-group'>
-                            <label>Image: </label>
-                            <input className={validInput.image ? 'form-control' : 'form-control is-invalid'}
-                                type="text"
-                                onChange={(e) => handleChangeInput(e.target.value, 'image')}
-                                value={userData.image}
-                            />
-                        </div>
-                        <div className='col-12 col-sm-6 form-group'>
-                            <label>Price: </label>
-                            <input className={validInput.price ? 'form-control' : 'form-control is-invalid'}
-                                type="text"
-                                onChange={(e) => handleChangeInput(e.target.value, 'price')}
-                                value={userData.price}
-                            />
-                        </div>
-                        {props.action === 'Create' ? <div className='col-12 col-sm-6 form-group'>
-                            <label>Price Old: </label>
-                            <input className={validInput.priceOld ? 'form-control' : 'form-control is-invalid'}
-                                type="text"
-                                onChange={(e) => handleChangeInput(e.target.value, 'priceOld')}
-                                value={userData.priceOld}
-                            />
-                        </div> : <div></div>}
-
                         <div className='col-12 col-sm-12 form-group'>
-                            <label>Status: </label>
-                            <input className={validInput.status ? 'form-control' : 'form-control is-invalid'}
+                            <label>Thông tin đơn hàng: </label>
+                            <input
+                                className={validInput.infoOrder ? 'form-control' : 'form-control is-invalid'}
                                 type="text"
-                                onChange={(e) => handleChangeInput(e.target.value, 'status')}
-                                value={userData.status}
+                                onChange={(e) => handleChangeInput(e.target.value, 'infoOrder')}
+                                value={userData.infoOrder}
+
                             />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Category: </label>
-                            <select onChange={(e) => handleChangeInput(e.target.value ? e.target.value : 1, 'categoryId')} aria-label="Default select example" className="form-select w-15">
-                                {categoryList && categoryList.length > 0 ?
-                                    categoryList.map(item =>
-                                        <option
-                                            selected={+userData["categoryId"] === item.id ? "selected" : ""}
-                                            value={item.id}>{item.name}</option>
-                                    )
-                                    :
-                                    <div></div>
-                                }
-                            </select>
+                            <label>Tổng tiền: </label>
+                            <input className={validInput.totalMoney ? 'form-control' : 'form-control is-invalid'}
+                                type="text"
+                                onChange={(e) => handleChangeInput(e.target.value, 'totalMoney')}
+                                value={userData.totalMoney}
+                            />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
+                            <label>Phone: </label>
+                            <input className={validInput.phone ? 'form-control' : 'form-control is-invalid'}
+                                type="text"
+                                onChange={(e) => handleChangeInput(e.target.value, 'phone')}
+                                value={userData.phone}
+                            />
+                        </div>
+                        <div className='col-12 col-sm-6 form-group'>
+                            <label>Email: </label>
+                            <input className={validInput.email ? 'form-control' : 'form-control is-invalid'}
+                                type="text"
+                                onChange={(e) => handleChangeInput(e.target.value, 'email')}
+                                value={userData.email}
+                            />
+                        </div>
+
+                        <div className='col-12 col-sm-6 form-group'>
+                            <label>Địa chỉ: </label>
+                            <input className={validInput.address ? 'form-control' : 'form-control is-invalid'}
+                                type="text"
+                                onChange={(e) => handleChangeInput(e.target.value, 'address')}
+                                value={userData.address}
+                            />
                         </div>
                     </div>
                 </Modal.Body>

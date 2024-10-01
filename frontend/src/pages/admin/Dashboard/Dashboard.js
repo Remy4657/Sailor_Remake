@@ -6,9 +6,9 @@ import "../css/styles_admin.css"
 //import styles from "./css/styles_admin.module.css";
 import { useState, useEffect, useRef } from "react"
 import { fetchAllProduct } from "../../../service/admin/productService"
-import { deleteProduct } from "../../../service/admin/adminService"
+import { deleteOrder } from "../../../service/admin/adminService"
 import ModalDelete from "./ModalDelete";
-import ModalProduct from "./ModalProduct";
+import ModalProduct from "./ModalDashboard";
 import { fetchAllCategory } from "../../../service/admin/adminService";
 import { userLogout } from "../../../service/admin/adminService";
 import { LOGOUT } from "../../../redux/actions/action";
@@ -62,6 +62,7 @@ const Dashboard = () => {
     // handle modal
     const handleEdit = (item) => {
         setAction('Update')
+        console.log("item update: ", item)
         setIsShowModalCreate(true)
         setDataEdit(item)
     }
@@ -76,7 +77,7 @@ const Dashboard = () => {
         setIsShowModalDelete(true)
     }
     const confirmDelete = async () => {
-        let response = await deleteProduct(dataModalDelete)
+        let response = await deleteOrder(dataModalDelete)
         if (response && response.data.EC === 0) {
             toast.success(response.data.EM)
             fetchOrder()
@@ -301,7 +302,7 @@ const Dashboard = () => {
                                                 </select>
 
                                             </div>
-                                            <div className="ms-3"><button className="btn btn-primary" >
+                                            <div className="ms-3"><button className="btn btn-primary" onClick={handleShowModalCreate}>
                                                 <i class="fa-solid fa-plus pe-2"></i>
                                                 Add order
                                             </button></div>
@@ -345,7 +346,6 @@ const Dashboard = () => {
                                                                             <i class="fa-solid fa-trash"></i>
                                                                         </button>
                                                                     </td>
-
                                                                 </tr>
                                                             )
                                                         })}
@@ -392,7 +392,22 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            <ModalDelete
+                dataModalDelete={dataModalDelete}
+                handleCloseModalDelete={handleCloseModalDelete}
+                isShowModalDelete={isShowModalDelete}
+                handleShowModalDelete={handleShowModalDelete}
+                confirmDelete={confirmDelete}
+            />
+            <ModalProduct
+                action={action}
+                isShowModalCreate={isShowModalCreate}
+                handleShowModalCreate={handleShowModalCreate}
+                handleCloseModalCreate={handleCloseModalCreate}
+                dataEdit={dataEdit}
+                fetchOrder={fetchOrder}
 
+            />
         </div>
     )
 }
