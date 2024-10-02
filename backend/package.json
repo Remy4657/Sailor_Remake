@@ -24,6 +24,7 @@
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.9.15",
     "nodemon": "2.0.15",
     "passport": "^0.7.0",
     "passport-google-oauth": "^2.0.0",

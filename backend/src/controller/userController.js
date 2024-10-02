@@ -1,4 +1,5 @@
 import userService from '../services/userService'
+import orderService from "../services/orderService"
 
 const userRegisterFunc = async (req, res) => {
     try {
@@ -218,8 +219,26 @@ const userCheckoutFunc = async (req, res) => {
         });
     }
 }
+const sendEmail = async (req, res) => {
+    try {
+        console.log("id account send email: ", req.body)
+        let data = await userService.sendEmail(req.body.idAccount)
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        });
 
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            EM: "error from server",
+            EC: "-1",
+            DT: "",
+        });
+    }
+}
 module.exports = {
     userRegisterFunc, userLoginFunc, userCheckoutFunc, adminLoginFunc, adminRegisterFunc, userLogoutFunc,
-    refreshToken, setNewAccessToken, refreshController
+    refreshToken, setNewAccessToken, refreshController, sendEmail
 }

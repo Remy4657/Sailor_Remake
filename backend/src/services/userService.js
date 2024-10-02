@@ -5,6 +5,9 @@ import jwtAction from "../jwt/JWTAction"
 import jwt from 'jsonwebtoken';
 require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
+const nodemailer = require('nodemailer');
+import orderService from "./orderService"
+
 
 const checkEmailExist = async (userEmail) => {
     let user = await db.User.findOne({
@@ -318,6 +321,73 @@ const adminRegister = async (data) => {
         }
     }
 }
+const sendEmail = async (idAccount) => {
+    try {
+        const dataOrder = await orderService.getOrder(idAccount)
+
+        console.log('dataOrder: ', dataOrder)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail', // You can use other email services
+            auth: {
+                user: 'trongdatga@gmail.com', // Your email
+                pass: 'fsvb zkih aeyf yciz'   // Your email password or app password
+            }
+        });
+
+        // Step 2: Set email options
+        const mailOptions = {
+            from: 'your-email@gmail.com',        // Sender address
+            to: 'trongdatga@gmail.com',   // List of recipients
+            subject: 'Xác nhận đơn hàng!',  // Subject line
+            text: '',         // Plain text body
+            html: `
+            <div>
+                <h1>Cảm ơn bạn đã đặt hàng!</h1>
+                <h2>Thông tin đơn hàng</h3>
+                <h3>Địa chỉ giao hàng:</h6>
+                <p>
+                    ${dataOrder.DT[0].firstname},<br>
+                    ${dataOrder.DT[0].address}, ${dataOrder.DT[0].commune}, ${dataOrder.DT[0].district}, ${dataOrder.DT[0].city}<br>
+                    SDT: ${dataOrder.DT[0].phone}
+                </p>
+                <ul>
+                    ${dataOrder.DT.map(item => `
+                    <li>
+                    ${item.Products.name} - Số lượng: ${item.Products.Cart_Detail.qty} - Giá: ${item.Products.price} VNĐ
+                    </li>
+                    `).join('')}
+                </ul>
+
+                <p><b>Tổng cộng: ${dataOrder.DT[0].totalMoney} VNĐ.</b></p>
+
+            </div>
+            ` // HTML body (optional)
+        };
+
+        // Step 3: Send the email
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        return {
+            EM: "Send email success",
+            EC: 1,
+            DT: dataOrder.DT,
+        };
+
+    } catch (error) {
+        console.log(error)
+        return {
+            EM: "error from server",
+            EC: "-1",
+            DT: "",
+        };
+    }
+}
 module.exports = {
-    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken
+    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail
 }

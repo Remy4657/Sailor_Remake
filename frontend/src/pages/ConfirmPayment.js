@@ -67,10 +67,7 @@ const ConfirmPayment = () => {
                             <div className="details_item">
                                 <h4>Order Info</h4>
                                 <ul className="list">
-                                    {/* <li><a href="#"><span>Mã đơn hàng</span> : { }</a></li>
-                                    <li><a href="#"><span>Tên</span> : {inforOrder.firstname}</a></li>
-                                    <li><a href="#"><span>Họ</span> :{inforOrder.lastname}</a></li>
-                                    <li><a href="#"><span>SDT</span> : {inforOrder.phone}</a></li> */}
+
                                 </ul>
                             </div>
                         </div>
@@ -78,10 +75,7 @@ const ConfirmPayment = () => {
                             <div className="details_item">
                                 <h4>Billing Address</h4>
                                 <ul className="list">
-                                    {/* <li><a href="#"><span>Địa chỉ</span> : {inforOrder.address}</a></li>
-                                    <li><a href="#"><span>Xã</span> : { }</a></li>
-                                    <li><a href="#"><span>Huyện: </span> : {inforOrder.district}</a></li>
-                                    <li><a href="#"><span>Tỉnh/thành phố </span> : {inforOrder.city}</a></li> */}
+
                                 </ul>
                             </div>
                         </div>

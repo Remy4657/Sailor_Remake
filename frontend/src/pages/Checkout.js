@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './Checkout.scss'
 import { useNavigate } from 'react-router-dom'
 import { fetchInfoOrder } from "../service/cartService"
-import { createOrder } from "../service/orderService"
+import { createOrder, sendEmail } from "../service/orderService"
 import { toast } from 'react-toastify'
 import { userCheckout } from '../service/userService'
 import { fetchCart_Detail } from '../service/cartService'
@@ -59,7 +59,6 @@ const Checkout = () => {
         })
         setDataCheckout({ ...dataCheckout, totalMoney: res.data.DT.reduce((total, currentValue, currentIndex) => (total + res.data.DT[currentIndex].Products.price * res.data.DT[currentIndex].Products.Cart_Detail.qty), res.data.DT[0].Shipping.value) })
     }
-    let a = 1
 
     var obj
     // init data to save in order table
@@ -97,6 +96,7 @@ const Checkout = () => {
         console.log(">>detailCart: ", detailCart)
         let resCreateOrder = await createOrder(obj)
         console.log("res create order: ", resCreateOrder)
+        await sendEmail(+idAccount)
         // khoi tao gio hang moi
         await initCart({ idAccount: +idAccount })
     }

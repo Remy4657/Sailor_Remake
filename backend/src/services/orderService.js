@@ -80,7 +80,6 @@ const getOrder = async (idAccount) => {
         let currentIDCart = await getIdCurrentCart(idAccount)
         console.log("id cart: ", currentIDCart)
         let order = await db.Cart.findAll({
-
             where: {
                 id: currentIDCart,
             },

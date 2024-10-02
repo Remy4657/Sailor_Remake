@@ -3,7 +3,10 @@ import db from "../../models/index";
 const getAllProduct = async () => {
     try {
         let products = await db.Product.findAll({
-            include: [{ model: db.Category }, { model: db.Cart, attributes: ["id"] }],
+            include: [
+                { model: db.Category },
+                { model: db.Cart, attributes: ["id"] }
+            ],
         });
         if (products) {
             // console.log('check user', products)

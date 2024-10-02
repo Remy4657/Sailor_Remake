@@ -105,8 +105,10 @@ const initApiRoutes = (app, passport) => {
     router.get("/order/read",
         orderController.readFuncAll
     )
-    router.post("/order/create", orderController.createFuncAll
-    )
+    router.post("/order/create", orderController.createFuncAll)
+
+    router.post("/send-email", userController.sendEmail)
+
     // login by google
     // router.get('/auth/google',
     //     passport.authenticate('google', { scope: ['profile', 'email'] }),
