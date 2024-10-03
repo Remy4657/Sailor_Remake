@@ -1944,8 +1944,8 @@ progress {
   }
 }
 @media (max-width: 991.98px) {
-    .navbar ul {
-        display: block !important;
+    .navbar.navbar-expand ul {
+        display: block ;
     }
   .table-responsive-lg {
     overflow-x: auto;
