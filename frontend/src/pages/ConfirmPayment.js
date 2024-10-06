@@ -25,20 +25,16 @@ const ConfirmPayment = () => {
         fetchOrderFunc()
 
     }, [])
-    let inforOrder
     const fetchOrderFunc = async () => {
-        //alert('me')
         let res = await fetchInfoOrder({ idAccount })
         console.log('res fetch order thankyou: ', res.data.DT)
         //setInfoOrder(res.data.DT[0])
-        inforOrder = res.data.DT[0]
         setProductCheckout({
             ...productCheckout,
             checkout: [...res.data.DT],
             shipping: res.data.DT[0].Shipping.value,
             totalMoney: res.data.DT.reduce((total, currentValue, currentIndex) => (total + res.data.DT[currentIndex].Products.price * res.data.DT[currentIndex].Products.Cart_Detail.qty), res.data.DT[0].Shipping.value)
         })
-        console.log('infor order: ', inforOrder)
     }
     return (
         <>

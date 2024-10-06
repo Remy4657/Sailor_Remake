@@ -41,6 +41,12 @@ h5,
 h6 {
   font-family: "Raleway", sans-serif;
 }
+span.error{
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: red;
+}
 /* add */
 .fa-solid.fa-bars {
   display: none;

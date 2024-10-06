@@ -1,25 +1,13 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-
-
 import { userRegister } from '../service/userService'
+import { useForm } from "react-hook-form"
 
 const Register = () => {
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [phone, setPhone] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-
-    const [dataUserRegister, setDataUserRegister] = useState('')
-
-    const handleRegister = async (e) => {
-        e.preventDefault()
-        let data = { email, username, phone, password, confirmPassword }
+    const handleRegister = async (data) => {
         let res = await userRegister(data)
         if (res && res.EC === 0) {
             toast.error(res.EM)
@@ -28,7 +16,14 @@ const Register = () => {
             toast.success(res.EM)
             navigate("/login")
         }
+        console.log("data: ", data)
     }
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
 
     return (
         <>
@@ -64,7 +59,7 @@ const Register = () => {
                         <div className="col-lg-6">
                             <div className="login_form_inner">
                                 <h3>Sigh up to enter</h3>
-                                <form className="row login_form" action="" method="post" id="contactForm">
+                                {/* <form className="row login_form" action="" method="post" id="contactForm">
                                     <div className="col-md-12 form-group">
                                         <input type="email" className="form-control" id="name" name="name" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
                                     </div>
@@ -80,14 +75,40 @@ const Register = () => {
                                     <div className="col-md-12 form-group">
                                         <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" onChange={(e) => setConfirmPassword(e.target.value)} />
                                     </div>
-                                    {/* <div className="col-md-12 form-group">
-                                        <div className="creat_account">
-                                            <input type="checkbox" id="f-option2" name="selector" />
-                                            <label for="f-option2">Keep me signed up</label>
-                                        </div>
-                                    </div> */}
                                     <div className="col-md-12 form-group">
                                         <button type="submit" value="submit" className="primary-btn" onClick={(e) => { handleRegister(e) }}>Register</button>
+                                        Are you had account?<Link className='text-info' to="/login"> Login</Link>
+                                    </div>
+                                </form> */}
+
+                                <form onSubmit={handleSubmit(handleRegister)} className="row login_form" action="" method="post" id="contactForm">
+                                    <div className="col-md-12 form-group">
+                                        <input type="email" className="form-control" id="name" name="name" placeholder="Email" {...register("email", { required: "Email address is required" })} />
+                                        {errors.email && <span className='error' role="alert">Email address is required</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group mt-2">
+                                        <input type="text" className="form-control" id="name" name="name" placeholder="Username" {...register("username", { required: true })} />
+                                        {errors.username && <span className='error'>Username is required.</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group mt-2">
+                                        <input type="text" className="form-control" id="name" name="name" placeholder="Phone number" {...register("phone", { required: true })} />
+                                        {errors.phone && <span className='error'>Phone is required.</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group mt-2">
+                                        <input type="password" className="form-control" id="name" name="name" placeholder="Password" {...register("password", { required: true, minLength: 4 })} />
+                                        {errors.password?.type === "required" && <span className='error'>Password is required.</span>}
+                                        {errors.password?.type === "minLength" && (
+                                            <span className="error">Password must be at least 4 characters long.</span>
+                                        )}
+
+
+                                    </div>
+                                    <div className="col-md-12 form-group mt-2">
+                                        <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" {...register("cfpassword", { required: true })} />
+                                        {errors.cfpassword && <span className='error'>Confirm password is required.</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group mt-4">
+                                        <input type="submit" value="Register" className="primary-btn" />
                                         Are you had account?<Link className='text-info' to="/login"> Login</Link>
                                     </div>
                                 </form>

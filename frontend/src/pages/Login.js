@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { userLogin, userLoginByGoogle } from '../service/userService'
+import { userLogin } from '../service/userService'
 import { inserUserToCart } from '../service/cartService'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
@@ -10,7 +10,7 @@ import {
     FETCH_DATA_SUCCESS,
     FETCH_DATA_ERROR,
 } from "../redux/actions/action";
-
+import { useForm } from "react-hook-form"
 
 const Login = () => {
     const { search } = useLocation();
@@ -23,10 +23,10 @@ const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleLogin = async (e) => {
-        e.preventDefault()
+    const handleLogin = async (data) => {
+        // e.preventDefault()
         dispatch(FETCHING_DATA());
-        let res = await userLogin({ username, password })
+        let res = await userLogin(data)
 
         if (res && res && +res.EC === 1) {
 
@@ -56,12 +56,13 @@ const Login = () => {
             dispatch(FETCH_DATA_ERROR());
         }
     }
-    const handleLoginByGoogle = async (e) => {
-        e.preventDefault()
-        await userLoginByGoogle()
-        //window.open("http://localhost:8080/api/v1/auth/google", "_self")
-        //navigate("http://localhost:8080/api/v1/auth/google")
-    }
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
     return (
         <>
             <section className="banner-area organic-breadcrumb">
@@ -96,26 +97,48 @@ const Login = () => {
                         <div className="col-lg-6">
                             <div className="login_form_inner">
                                 <h3>Log in to enter</h3>
-                                <form className="row login_form" action="" method="post" id="contactForm">
+                                {/* <form className="row login_form" action="" method="post" id="contactForm">
                                     <div className="col-md-12 form-group">
                                         <input type="text" className="form-control" id="name" name="name" placeholder="Username" onChange={(e) => setUsername(e.target.value)} value={username} />
                                     </div>
                                     <div className="col-md-12 form-group">
                                         <input type="password" className="form-control" id="name" name="name" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
                                     </div>
-                                    <div className="col-md-12 form-group">
-                                        {/* <div className="creat_account">
-                                            <input type="checkbox" id="f-option2" name="selector" />
-                                            <label for="f-option2">Keep me logged in</label>
-                                        </div> */}
-                                    </div>
+
                                     <div className="col-md-12 form-group">
                                         <button type="submit" value="submit" className="primary-btn" onClick={(e) => handleLogin(e)}>Log In</button>
-                                        {/* <button type="submit" value="submit" className="primary-btn mt-3" onClick={(e) => handleLoginByGoogle(e)}>Log In by Google</button> */}
                                         <Link to="http://localhost:8080/login-google">login by google</Link>
                                         <a href="#">Forgot Password?</a>
                                     </div>
+                                </form> */}
+
+                                <form onSubmit={handleSubmit(handleLogin)} className="row login_form">
+                                    <div className="col-md-12 form-group">
+                                        <input className="form-control" type="text" defaultValue="" placeholder="Username" {...register("username", { required: true })} />
+                                        {errors.username && <span
+                                            style={{
+                                                color: "red",
+                                                display: "block",
+                                                width: "100%",
+                                                textAlign: "left"
+                                            }}>
+                                            This field is required</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group mt-3">
+                                        <input className="form-control" type="password" defaultValue="" placeholder="Password" {...register("password", { required: true })} />
+                                        {errors.password && <span style={{
+                                            color: "red",
+                                            display: "block",
+                                            width: "100%",
+                                            textAlign: "left"
+                                        }}>This field is required</span>}
+                                    </div>
+
+                                    <div className="col-md-12 form-group mt-5">
+                                        <input type="submit" value="LOGIN" className="primary-btn" />
+                                    </div>
                                 </form>
+
                             </div>
                         </div>
                     </div>

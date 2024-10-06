@@ -9,6 +9,8 @@ import { userCheckout } from '../service/userService'
 import { fetchCart_Detail } from '../service/cartService'
 import { initCart } from '../service/cartService'
 import { useSelector } from 'react-redux'
+import { useForm } from "react-hook-form"
+
 
 const Checkout = () => {
 
@@ -49,7 +51,6 @@ const Checkout = () => {
 
     const fetchOrderFunc = async () => {
         let res = await fetchInfoOrder({ idAccount })
-        console.log('res fetch order: ', res.data)
 
         setProductCheckout({
             ...productCheckout,
@@ -63,9 +64,7 @@ const Checkout = () => {
     var obj
     // init data to save in order table
     const fetchDetailCart = async () => {
-        console.log("id account checkout: ", idAccount)
         const res_detail_cart = await fetchCart_Detail(idAccount)
-        console.log("res_detail_cart: ", res_detail_cart)
         const cartDetailsObject = res_detail_cart.data.DT.reduce((arr_ini, item, index) => {
             arr_ini[`Product${index + 1}`] = { name: item.Products.name, qty: item.Products.Cart_Detail.qty };
             return arr_ini;
@@ -83,29 +82,35 @@ const Checkout = () => {
         //console.log("obj: ", obj)
         //setDetailCart(obj)
     }
-    const handleProceed = async () => {
-
-        //const dataCheckout = { ...dataCheckout, idPayment: paymentMethod }
-        let res = await userCheckout({ ...dataCheckout, idPayment: paymentMethod })
-
+    const handleProceed = async (data) => {
+        let res = await userCheckout({ ...dataCheckout, ...data, idPayment: paymentMethod })
+        console.log("data Checkout: ", dataCheckout)
         if (res && res.EC === 0) {
             setEC(0)
             toast.error(res.EM)
         }
         await fetchDetailCart()
-        console.log(">>detailCart: ", detailCart)
         let resCreateOrder = await createOrder(obj)
-        console.log("res create order: ", resCreateOrder)
         await sendEmail(+idAccount)
         // khoi tao gio hang moi
         await initCart({ idAccount: +idAccount })
+
+        navigate("/thank-you")
     }
+
     const preventF = (e) => {
         console.log('ec: ', EC)
         if (EC == 0) {
             e.preventDefault()
         }
     }
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
     return (
         <>
             {/* <!-- Start Banner Area --> */}
@@ -132,37 +137,30 @@ const Checkout = () => {
                         <div className="row">
                             <div className="col-lg-8">
                                 <h3>Billing Details</h3>
-                                <form className="row contact_form" action="#" method="post">
+                                {/* <form className="row contact_form" action="#" method="post">
                                     <div className="col-md-6 form-group p_star">
                                         <input required="true" placeholder='Firstname' type="text" className="form-control" id="first" name="name" onChange={(e) => setDataCheckout({ ...dataCheckout, firstname: e.target.value })} />
-                                        {/* <span className="placeholder" data-placeholder="First name"></span> */}
                                     </div>
                                     <div className="col-md-6 form-group p_star">
                                         <input placeholder='Lastname' type="text" className="form-control" id="last" name="name" onChange={(e) => setDataCheckout({ ...dataCheckout, lastname: e.target.value })} />
-                                        {/* <span className="placeholder" ></span> */}
                                     </div>
 
                                     <div className="col-md-6 form-group p_star">
                                         <input placeholder='Phone number' type="text" className="form-control" id="number" name="number" onChange={(e) => setDataCheckout({ ...dataCheckout, phone: e.target.value })} />
-                                        {/* <span className="placeholder" data-placeholder="Phone number"></span> */}
                                     </div>
 
 
                                     <div className="col-md-12 form-group p_star">
                                         <input placeholder='Address' type="text" className="form-control" id="nha" name="nha" onChange={(e) => setDataCheckout({ ...dataCheckout, address: e.target.value })} />
-                                        {/* <span className="placeholder" data-placeholder="Số nhà/đường"></span> */}
                                     </div>
                                     <div className="col-md-12 form-group p_star">
                                         <input placeholder='Commune' type="text" className="form-control" id="xa" name="xa" onChange={(e) => setDataCheckout({ ...dataCheckout, commune: e.target.value })} />
-                                        {/* <span className="placeholder" data-placeholder="Xã/phường"></span> */}
                                     </div>
                                     <div className="col-md-12 form-group p_star">
                                         <input placeholder='District' type="text" className="form-control" id="district" name="district" onChange={(e) => setDataCheckout({ ...dataCheckout, district: e.target.value })} />
-                                        {/* <span className="placeholder" data-placeholder="Huyện"></span> */}
                                     </div>
                                     <div className="col-md-12 form-group p_star">
                                         <input placeholder='City' type="text" className="form-control" id="city" name="city" onChange={(e) => setDataCheckout({ ...dataCheckout, city: e.target.value })} />
-                                        {/* <span className="placeholder" data-placeholder="Tỉnh/thành"></span> */}
                                     </div>
 
                                     <div className="col-md-12 form-group">
@@ -178,6 +176,57 @@ const Checkout = () => {
                                             <label for="f-option3">Ship to a different address?</label>
                                         </div>
                                         <textarea className="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
+                                    </div>
+                                </form> */}
+
+                                <form className="row contact_form" action="#" method="post" onSubmit={handleSubmit(handleProceed)}>
+                                    <div className="col-md-6 form-group p_star">
+                                        <input required="true" placeholder='Firstname' type="text" className="form-control" id="first" name="name" {...register("firstname", { required: true })} />
+                                        {errors.firstname && <span className='error' role="alert">Firstname is required.</span>}
+                                    </div>
+                                    <div className="col-md-6 form-group p_star">
+                                        <input placeholder='Lastname' type="text" className="form-control" id="last" name="name"  {...register("lastname", { required: true })} />
+                                        {errors.lastname && <span className='error' role="alert">Lastname is required</span>}
+                                    </div>
+
+                                    <div className="col-md-6 form-group p_star">
+                                        <input placeholder='Phone number' type="text" className="form-control" id="number" name="number"  {...register("phone", { required: true })} />
+                                        {errors.phone && <span className='error' role="alert">Phone number is required</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group p_star">
+                                        <input placeholder='Address' type="text" className="form-control" id="nha" name="nha"  {...register("address", { required: true })} />
+                                        {errors.address && <span className='error' role="alert">Address is required</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group p_star">
+                                        <input placeholder='Commune' type="text" className="form-control" id="xa" name="xa"  {...register("commune", { required: true })} />
+                                        {errors.commune && <span className='error' role="alert">Commune is required</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group p_star">
+                                        <input placeholder='District' type="text" className="form-control" id="district" name="district"  {...register("district", { required: true })} />
+                                        {errors.district && <span className='error' role="alert">District is required</span>}
+                                    </div>
+                                    <div className="col-md-12 form-group p_star">
+                                        <input placeholder='City' type="text" className="form-control" id="city" name="city" {...register("city", { required: true })} />
+                                        {errors.city && <span className='error' role="alert">City is required</span>}
+                                    </div>
+
+                                    <div className="col-md-12 form-group">
+                                        <input type="text" className="form-control" id="zip" name="zip" placeholder="Postcode/ZIP" />
+                                    </div>
+                                    <div className="col-md-12 form-group">
+
+                                    </div>
+                                    <div className="col-md-12 form-group">
+                                        <div className="creat_account">
+                                            <h3>Shipping Details</h3>
+                                            <input type="checkbox" id="f-option3" name="selector" />
+                                            <label for="f-option3">Ship to a different address?</label>
+                                        </div>
+                                        <textarea className="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
+                                    </div>
+
+                                    <div className="col-md-12 form-group mt-4">
+                                        <input type="submit" value="CHECKOUT" className="primary-btn" />
                                     </div>
                                 </form>
                             </div>
@@ -230,10 +279,9 @@ const Checkout = () => {
                                         <label for="f-option4">I’ve read and accept the </label>
                                         <a href="#">terms & conditions*</a>
                                     </div>
-                                    <div onClick={() => handleProceed()}>
-
+                                    {/* <div onClick={() => handleProceed()}>
                                         <Link className="primary-btn" to="/thank-you" onClick={(e) => preventF(e)}>Thanh toán</Link>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

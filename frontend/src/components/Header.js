@@ -103,7 +103,7 @@ const Header = () => {
 
                         <nav id="navbar" className="navbar navbar-user">
                             <div className={isShowSidebar ? "div-ul" : "div-ul d-none-cus"}>
-                                <ul className={isShowSidebar ? "ul " : "ul"}>
+                                <ul className={"ul"}>
 
                                     <li className="d-flex justify-content-between">
                                         <Link className={focusList.isFocusHome ? "active" : ""} to="/" onClick={() => handleFocusClick("isFocusHome")}>HOME</Link>

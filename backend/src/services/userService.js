@@ -46,7 +46,7 @@ const userRegister = async (data) => {
                 DT: 'phone'
             };
         }
-        if (data.password !== data.confirmPassword) {
+        if (data.password !== data.cfpassword) {
             return {
                 EM: "Confirm password invalid",
                 EC: 0,
@@ -276,23 +276,23 @@ const adminLogin = async (data) => {
 }
 const adminRegister = async (data) => {
     try {
-        // let isEmailExist = await checkEmailExist(data.email);
-        // if (isEmailExist === true) {
-        //     return {
-        //         EM: "The email is already exist",
-        //         EC: 0,
-        //         DT: 'email'
-        //     };
-        // }
-        // // check phone number
-        // let isPhoneExist = await checkPhoneExist(data.phone);
-        // if (isPhoneExist === true) {
-        //     return {
-        //         EM: "The phone number is already exist",
-        //         EC: 0,
-        //         DT: 'phone'
-        //     };
-        // }
+        let isEmailExist = await checkEmailExist(data.email);
+        if (isEmailExist === true) {
+            return {
+                EM: "The email is already exist",
+                EC: 0,
+                DT: ''
+            };
+        }
+        // check phone number
+        let isPhoneExist = await checkPhoneExist(data.phone);
+        if (isPhoneExist === true) {
+            return {
+                EM: "The phone number is already exist",
+                EC: 0,
+                DT: ''
+            };
+        }
         if (data.password !== data.confirmPassword) {
             return {
                 EM: "Confirm password invalid",

@@ -221,7 +221,6 @@ const userCheckoutFunc = async (req, res) => {
 }
 const sendEmail = async (req, res) => {
     try {
-        console.log("id account send email: ", req.body)
         let data = await userService.sendEmail(req.body.idAccount)
         return res.status(200).json({
             EM: data.EM,
