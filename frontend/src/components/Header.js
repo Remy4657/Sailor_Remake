@@ -6,12 +6,13 @@ import { INITIAL_LIST_PRODUCT } from "../redux/actions/action";
 import './Header.scss'
 import { fetchAllProduct } from "../service/productService";
 import { userLogout } from "../service/userService";
+import { includes } from "lodash";
+import Autocomplete from "./Autocomplete/Autocomplete";
 
 const Header = () => {
     //const useSelector = useSelector()
     const isAuth = useSelector(state => state.user.auth)
     const [isShowSearch, setIsShowSearch] = useState(false)
-    const [valueSearch, setValueSearch] = useState("")
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const username = useSelector((state) => state.user.account.username);
@@ -28,28 +29,6 @@ const Header = () => {
     const [focusList, setFocusList] = useState(defaultFocusList)
     const [isShowSidebar, setIsShowSidebar] = useState(false)
 
-    // when refresh => get user info was saved at session to avoid lost info user
-    useEffect(() => {
-        // if (sessionStorage.getItem("username") !== null && sessionStorage.getItem("email") !== null &&
-        //     sessionStorage.getItem("idAccount") !== null && sessionStorage.getItem("role") !== null) {
-        //     const userInfo = {
-        //         Roles: {
-        //             name: sessionStorage.getItem("role")
-        //         },
-        //         email: sessionStorage.getItem("email"),
-        //         username: sessionStorage.getItem("username"),
-        //         id: sessionStorage.getItem("idAccount")
-        //     }
-        //     dispatch(
-        //         FETCH_DATA_SUCCESS(
-        //             //sessionStorage.getItem("userAccount"),
-        //             userInfo
-        //         )
-        //     );
-        // }
-    }, []);
-
-
     const handleLogout = async (e) => {
         e.preventDefault()
         await userLogout()
@@ -57,12 +36,7 @@ const Header = () => {
         dispatch(LOGOUT())
         navigate('/login')
     }
-    const handleSearch = (e) => {
-        if (e.key === "Enter") {
-            const filterListProduct = refListProduct.current.filter(item => item.name.toLowerCase().includes(valueSearch.toLowerCase()) === true)
-            dispatch(INITIAL_LIST_PRODUCT(filterListProduct))
-        }
-    }
+
     const fetchProducts = async () => {
         let res = await fetchAllProduct()
         //let res = await fetchAllUser()
@@ -91,6 +65,7 @@ const Header = () => {
         setIsShowSidebar(false)
 
     }
+
     return (
         <div>
             <div>
@@ -161,7 +136,12 @@ const Header = () => {
 
                     </div>
 
-                    <input value={valueSearch} onChange={(e) => setValueSearch(e.target.value)} onKeyUp={(e) => handleSearch(e)} className={isShowSearch ? "input-search show" : "input-search hidden"} type="text" placeholder="Search product..." />
+                    {/* <input value={valueSearch} onChange={(e) => handleSearchOnchange(e)} onKeyUp={(e) => handleSearch(e)} className={isShowSearch ? "input-search show" : "input-search hidden"} type="text" placeholder="Search product..." /> */}
+                    {isShowSearch && <Autocomplete setIsShowSearch={setIsShowSearch} />}
+
+                    {/* <ul>
+                        {listSuggest.map((item, index) => <li key={`li ${index}`}>{item.name}</li>)}
+                    </ul> */}
                 </header>
 
             </div>

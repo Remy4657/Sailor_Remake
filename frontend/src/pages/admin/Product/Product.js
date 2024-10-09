@@ -16,6 +16,8 @@ import { LOGOUT } from "../../../redux/actions/action";
 const Product = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const refListProduct = useRef()
+    const account = useSelector(state => state.user.account)
 
     const [toggleSidebar, setToggleSidebar] = useState(false)
     const [action, setAction] = useState('Create')
@@ -28,24 +30,26 @@ const Product = () => {
     const [keySearch, setKeySearch] = useState("")
     const [page, setPage] = useState(0);
     const [itemPerPage, setItemPerPage] = useState(10)
-    const refListProduct = useRef()
-    const account = useSelector(state => state.user.account)
+    const [sort, setSort] = useState("")
+    const [nameColumnClicked, setNameColumnClicked] = useState("")
 
     const handleSidebarClick = () => {
         setToggleSidebar(!toggleSidebar)
     }
 
-    useEffect(() => {
+    useEffect(() => { // useEffect 1
         fetchProducts()
     }, [])
     //phan trang, item per page, fetch list product lan dau load
     useEffect(() => {
         //setListProduct(listProductRedux)
-        setFilterListProduct(
+        setFilterListProduct( // useEffect 2
             listProduct.filter((item, index) => (index >= page * itemPerPage) && (index < (page + 1) * itemPerPage)
             )
         );
     }, [page, itemPerPage, listProduct]);
+
+
 
     const ItemPerPageOnchange = (e) => {
         const ItemPerPage = e.target.value
@@ -53,11 +57,14 @@ const Product = () => {
     }
 
     const fetchProducts = async () => {
+        console.log("fetchProducts")
         let res = await fetchAllProduct()
 
         if (res && res.data.DT) {
             refListProduct.current = res.data.DT
+            console.log("res.data.DT: ", res.data.DT)
             setListProduct(res.data.DT)
+            console.log("me")
         }
     }
     // handle modal
@@ -113,6 +120,42 @@ const Product = () => {
         await userLogout()
         dispatch(LOGOUT())
         navigate('/admin/login')
+    }
+
+    const handleSort = (value) => {
+        setNameColumnClicked(value)
+        if (sort === "asc") {
+            setSort("desc")
+        }
+        else {
+            setSort("asc")
+        }
+        if (value === "price" || value === "priceOld") {
+            if (sort === "asc") {
+
+                // phair dung [...refListProduct.current] de state hieu laf da thay doi listProduct (tao 1 tham chieu moi)
+                const sortList = [...refListProduct.current].sort((a, b) => (b[value] - a[value]))
+                setListProduct(sortList)
+
+            }
+            else {
+                // phair dung [...refListProduct.current] de state hieu laf da thay doi listProduct (tao 1 tham chieu moi)
+                const sortList = [...refListProduct.current].sort((a, b) => (a[value] - b[value]))
+                setListProduct(sortList)
+            }
+        }
+        else {
+            if (sort === "asc") {
+                const sortList = [...refListProduct.current].sort((a, b) => b[value].localeCompare(a[value]))
+                setListProduct(sortList)
+            }
+            else {
+                const sortList = [...refListProduct.current].sort((a, b) => a[value].localeCompare(b[value]))
+                setListProduct(sortList)
+            }
+        }
+
+
     }
 
     return (
@@ -317,12 +360,35 @@ const Product = () => {
                                             <tr style={{ borderWidth: "1px" }}>
                                                 <th>Stt</th>
                                                 <th>Id</th>
-                                                <th>Name</th>
-                                                <th>Image</th>
-                                                <th>Price</th>
-                                                <th>Price Old</th>
-                                                <th>Status</th>
-                                                <th>Category</th>
+                                                <th onClick={() => handleSort("name")}>
+                                                    Name
+                                                    {sort === "asc" && nameColumnClicked === "name" && <i class="fa-solid fa-arrow-up"></i>}
+                                                    {sort === "desc" && nameColumnClicked === "name" && <i class="fa-solid fa-arrow-down"></i>}
+                                                </th>
+                                                <th >Image</th>
+                                                <th onClick={() => {
+                                                    handleSort("price")
+                                                }}>Price
+                                                    {sort === "asc" && nameColumnClicked === "price" && <i class="fa-solid fa-arrow-up"></i>}
+                                                    {sort === "desc" && nameColumnClicked === "price" && <i class="fa-solid fa-arrow-down"></i>}
+                                                </th>
+                                                <th onClick={() => {
+                                                    handleSort("priceOld")
+                                                }}>Price Old
+                                                    {sort === "asc" && nameColumnClicked === "priceOld" && <i class="fa-solid fa-arrow-up"></i>}
+                                                    {sort === "desc" && nameColumnClicked === "priceOld" && <i class="fa-solid fa-arrow-down"></i>}
+
+                                                </th>
+                                                <th onClick={() => {
+                                                    handleSort("status")
+                                                }}>Status
+                                                    {sort === "asc" && nameColumnClicked === "status" && <i class="fa-solid fa-arrow-up"></i>}
+                                                    {sort === "desc" && nameColumnClicked === "status" && <i class="fa-solid fa-arrow-down"></i>}
+                                                </th>
+                                                <th>
+                                                    Category
+
+                                                </th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -369,16 +435,22 @@ const Product = () => {
 
                                         </tbody>
                                     </table>
-                                    <ReactPaginate
-                                        containerClassName={"pagination"}
-                                        pageClassName={"page-item"}
-                                        activeClassName={"active-pagination"}
-                                        onPageChange={(event) => setPage(event.selected)}
-                                        pageCount={Math.ceil(listProduct.length / itemPerPage)}
-                                        breakLabel="..."
-                                        previousLabel={<i className="fas fa-chevron-left" ></i>}
-                                        nextLabel={<i className="fas fa-chevron-right"></i>}
-                                    />
+                                    <div className="d-flex justify-content-between">
+
+                                        <ReactPaginate
+                                            containerClassName={"pagination"}
+                                            pageClassName={"page-item"}
+                                            activeClassName={"active-pagination"}
+                                            onPageChange={(event) => setPage(event.selected)}
+                                            pageCount={Math.ceil(listProduct.length / itemPerPage)}
+                                            breakLabel="..."
+                                            previousLabel={<i className="fas fa-chevron-left" ></i>}
+                                            nextLabel={<i className="fas fa-chevron-right"></i>}
+                                        />
+                                        <div className='ms-3 d-flex'>
+                                            <p style={{ margin: "auto" }}>{itemPerPage * page + 1}-{itemPerPage * page + filterListProduct.length} of {listProduct.length} items</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

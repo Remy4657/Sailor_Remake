@@ -46,7 +46,7 @@ function App() {
   const isLoading = useSelector(state => state.user.isLoading)
   const dispatch = useDispatch()
 
-  const nonSecurePaths = ['/register'] // khais bao nhung trang nao khi refresh maf chua login thif da ve trang login
+  const nonSecurePaths = [] // khais bao nhung trang nao khi refresh maf chua login thif da ve trang login
   const redirectInUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectInUrl ? redirectInUrl : "/";
   const isAdminRoute = location.pathname.startsWith('/admin')
@@ -83,7 +83,6 @@ function App() {
     }
   }
   useEffect(() => {
-
     // sendIdAccount()
     // if (!username) {
     //   navigate("/login?redirect=/cart")
@@ -123,6 +122,7 @@ function App() {
       dispatch(INITIAL_CARTALL_REDUX(res.data.DT))
     }
   }
+  console.log("hello")
 
   return (
     <div className="">
@@ -159,21 +159,16 @@ function App() {
             <Route exact path="/pa" element={<Pagination />} />
             {/* admin */}
             <Route exact path="/admin/login" element={<AdminLogin />} />
-            <Route exact path='/admin/dashboard' element={<AdminRoute />}>
+            <Route path='/admin' element={<AdminRoute />}>
               <Route exact path="/admin/dashboard" element={<Dashboard />} />
+              <Route exact path="/admin/product" element={<Product />} />
             </Route>
-            <Route exact path="/admin/product" element={<Product />} />
 
           </Routes>
           {!isAdminRoute && <Footer />}
         </div>}
-
-
       <div>
-
       </div>
-
-
     </div>
   );
 }

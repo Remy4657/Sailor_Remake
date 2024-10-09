@@ -31,7 +31,7 @@ const initApiRoutes = (app, passport) => {
         userController.userLogoutFunc
     )
     router.get("/refresh", JWTAction.checkUserJWT, userController.refreshController)
-    router.post("/user/checkout",
+    router.post("/user/checkout", JWTAction.checkUserJWT,
         userController.userCheckoutFunc
     )
     router.get("/refresh_access_token", userController.refreshToken)

@@ -25,7 +25,6 @@ const Dashboard = () => {
     const [isShowModalCreate, setIsShowModalCreate] = useState(false)
     const [dataModalDelete, setDataModalDelete] = useState()
     const [dataEdit, setDataEdit] = useState('')
-    const [listProduct, setListProduct] = useState([])
     const [filterListOrder, setFilterListOrder] = useState([]);
     const [keySearch, setKeySearch] = useState("")
     const [page, setPage] = useState(0);
@@ -44,7 +43,6 @@ const Dashboard = () => {
 
     //phan trang, item per page, fetch list product lan dau load
     useEffect(() => {
-        //setListProduct(listProductRedux)
         setFilterListOrder(
             listOrder.filter((item, index) => (index >= page * itemPerPage) && (index < (page + 1) * itemPerPage)
             )
@@ -363,16 +361,22 @@ const Dashboard = () => {
 
                                         </tbody>
                                     </table>
-                                    <ReactPaginate
-                                        containerClassName={"pagination"}
-                                        pageClassName={"page-item"}
-                                        activeClassName={"active-pagination"}
-                                        onPageChange={(event) => setPage(event.selected)}
-                                        pageCount={Math.ceil(listOrder.length / itemPerPage)}
-                                        breakLabel="..."
-                                        previousLabel={<i className="fas fa-chevron-left" ></i>}
-                                        nextLabel={<i className="fas fa-chevron-right"></i>}
-                                    />
+
+                                    <div className="d-flex justify-content-between">
+                                        <ReactPaginate
+                                            containerClassName={"pagination"}
+                                            pageClassName={"page-item"}
+                                            activeClassName={"active-pagination"}
+                                            onPageChange={(event) => setPage(event.selected)}
+                                            pageCount={Math.ceil(listOrder.length / itemPerPage)}
+                                            breakLabel="..."
+                                            previousLabel={<i className="fas fa-chevron-left" ></i>}
+                                            nextLabel={<i className="fas fa-chevron-right"></i>}
+                                        />
+                                        <div className='ms-3 d-flex'>
+                                            <p style={{ margin: "auto" }}>{itemPerPage * page + 1}-{itemPerPage * page + filterListOrder.length} of {listOrder.length} items</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

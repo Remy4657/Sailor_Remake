@@ -51,6 +51,7 @@ const Checkout = () => {
 
     const fetchOrderFunc = async () => {
         let res = await fetchInfoOrder({ idAccount })
+        console.log("res at checkout: ", res)
 
         setProductCheckout({
             ...productCheckout,
@@ -91,11 +92,12 @@ const Checkout = () => {
         }
         await fetchDetailCart()
         let resCreateOrder = await createOrder(obj)
+        navigate("/thank-you")
+
         await sendEmail(+idAccount)
         // khoi tao gio hang moi
         await initCart({ idAccount: +idAccount })
 
-        navigate("/thank-you")
     }
 
     const preventF = (e) => {
