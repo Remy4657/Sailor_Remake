@@ -53,6 +53,7 @@ const Cart = () => {
             })
         }
         dispatch(INITIAL_CART_REDUX(a))
+        console.log("a: ", a)
         setArrCart(a)
         setTotal(tt)
     }

@@ -1,6 +1,5 @@
 
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './components/main.css'
 import { sendIdAccount } from "./service/userService";
@@ -22,6 +21,7 @@ import ConfirmPayment from "./pages/ConfirmPayment";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import Product from "./pages/admin/Product/Product";
+import Order from "./pages/Order";
 import Dashboard from "./pages/admin/Dashboard/Dashboard";
 import AdminRoute from "./routes/AdminRoute";
 import UserRoute from "./routes/UserRoute";
@@ -35,8 +35,6 @@ import { INITIAL_CART_REDUX, INITIAL_CARTALL_REDUX, FETCH_DATA_SUCCESS, FETCH_FI
 import { refresh } from "./service/userService";
 import Pagination from "./components/Pagination";
 import BounceLoader from "react-spinners/BounceLoader";
-
-
 
 function App() {
   const navigate = useNavigate()
@@ -122,7 +120,6 @@ function App() {
       dispatch(INITIAL_CARTALL_REDUX(res.data.DT))
     }
   }
-  console.log("hello")
 
   return (
     <div className="">
@@ -156,6 +153,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/order" element={<Order />} />
             <Route exact path="/pa" element={<Pagination />} />
             {/* admin */}
             <Route exact path="/admin/login" element={<AdminLogin />} />

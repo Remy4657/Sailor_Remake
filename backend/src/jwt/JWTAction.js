@@ -49,7 +49,6 @@ const extractToken = req => {
 }
 const checkUserJWT = async (req, res, next) => {
 
-    console.log("req.path: ", req.path)
     if (nonSecurePaths.includes(req.path)) return next(); // req.path = "/refresh"
 
     if (req.cookies && req.cookies.access_token) {

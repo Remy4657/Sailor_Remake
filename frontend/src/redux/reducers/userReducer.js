@@ -30,7 +30,6 @@ const userReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 auth: true,
-                isLoading: false,
                 role: action.user.Roles.name,
                 account: {
                     idAccount: action.user.id,

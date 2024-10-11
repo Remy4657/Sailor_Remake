@@ -100,8 +100,6 @@ const Register = () => {
                                         {errors.password?.type === "minLength" && (
                                             <span className="error">Password must be at least 4 characters long.</span>
                                         )}
-
-
                                     </div>
                                     <div className="col-md-12 form-group mt-2">
                                         <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" {...register("cfpassword", { required: true })} />

@@ -102,7 +102,7 @@ const initApiRoutes = (app, passport) => {
         shippingController.readFunc
     )
     // order controller
-    router.get("/order/read",
+    router.post("/order/read-all",
         orderController.readFuncAll
     )
     router.post("/order/create", orderController.createFuncAll)

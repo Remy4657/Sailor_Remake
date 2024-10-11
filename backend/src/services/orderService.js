@@ -1,4 +1,5 @@
 import db from "../models/index";
+import sequelize from "sequelize";
 
 const getIdCurrentCart = async (idAccount) => {
     try {
@@ -19,7 +20,7 @@ const getIdCurrentCart = async (idAccount) => {
 
 }
 
-const getOrderAll = async () => {
+const getOrderAll = async (idAccount) => {
 
     try {
 
@@ -39,36 +40,71 @@ const getOrderAll = async () => {
         //     raw: true,
         //     nest: true
         // });
-        let order = await db.Orders.findAll({
+        console.log("=====================================================================================")
 
-
-            attributes: ["id", "infoOrder", "totalMoney", "phone", "email", "address"],
-
-
-            raw: true,
-            nest: true
-        });
-        //console.log('get cart by id: ', cart)
-        if (order) {
-            // console.log('check user', cart)
-            return {
-                EM: 'get order success',
-                EC: 0,
-                DT: order
+        if (idAccount) {
+            let order = await db.Orders.findAll({
+                attributes: ["id", "infoOrder", "totalMoney", "phone", "email", "address"],
+                include: [
+                    {
+                        model: db.Cart,
+                        include: db.Product,
+                        where: {
+                            userId: idAccount // Thêm điều kiện where trực tiếp trong include của model Cart
+                        }
+                    },
+                ],
+                //where: sequelize.where(sequelize.col(db.Cart.userId), '=', idAccount),
+                raw: true,
+                nest: true
+            });
+            //console.log('get cart by id: ', cart)
+            if (order) {
+                // console.log('check user', cart)
+                return {
+                    EM: 'get order success',
+                    EC: 0,
+                    DT: order
+                }
+            }
+            else {
+                console.log('not get order')
+                return {
+                    EM: 'get order error',
+                    EC: 0,
+                    DT: []
+                }
             }
         }
         else {
-            console.log('not get order')
-            return {
-                EM: 'get order error',
-                EC: 0,
-                DT: []
+            let order = await db.Orders.findAll({
+                attributes: ["id", "infoOrder", "totalMoney", "phone", "email", "address"],
+                raw: true,
+                nest: true
+            });
+            //console.log('get cart by id: ', cart)
+            if (order) {
+                // console.log('check user', cart)
+                return {
+                    EM: 'get order success',
+                    EC: 0,
+                    DT: order
+                }
+            }
+            else {
+                console.log('not get order')
+                return {
+                    EM: 'get order error',
+                    EC: 0,
+                    DT: []
+                }
             }
         }
+
     } catch (error) {
         console.log(error)
         return {
-            EM: 'wrong from server',
+            EM: `error: ${error}`,
             EC: -1,
             DT: []
         }

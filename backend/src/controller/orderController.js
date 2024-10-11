@@ -3,8 +3,8 @@ import orderService from '../services/orderService'
 const readFuncAll = async (req, res) => {
     try {
 
-
-        let data = await orderService.getOrderAll()
+        // console.log("id accountt: ", req.body.idAccount)
+        let data = await orderService.getOrderAll(req.body.idAccount)
 
         return res.status(200).json({
             EM: data.EM,

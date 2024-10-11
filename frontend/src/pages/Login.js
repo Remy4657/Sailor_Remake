@@ -3,7 +3,7 @@ import { userLogin } from '../service/userService'
 import { inserUserToCart } from '../service/cartService'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import {
     FETCHING_DATA,
@@ -14,42 +14,32 @@ import { useForm } from "react-hook-form"
 
 const Login = () => {
     const { search } = useLocation();
-    const redirectInUrl = new URLSearchParams(search).get("redirect");
-    const redirectUrl = redirectInUrl ? redirectInUrl : "/";
+    // const redirectInUrl = new URLSearchParams(search).get("redirect");
+    // const redirectUrl = redirectInUrl ? redirectInUrl : "/";
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-
     const handleLogin = async (data) => {
         // e.preventDefault()
+        const redirectInUrl = new URLSearchParams(search).get("redirect");
+        const redirectUrl = redirectInUrl ? redirectInUrl : "/";
         dispatch(FETCHING_DATA());
         let res = await userLogin(data)
 
         if (res && res && +res.EC === 1) {
 
-            // let data = {
-            //     isAuthenticated: true,
-            //     token: "fake token",
-            // };
+
             let idAccount = res.DT.UserId
             await inserUserToCart({ idAccount })
-
-            //localStorage.setItem("token", data.token);
-            // id user se xem cart của người đó
-            // sessionStorage.setItem("idAccount", idAccount);
-            // sessionStorage.setItem("email", res.DT.payload.userRole.email);
-            // sessionStorage.setItem("username", res.DT.payload.userRole.username);
-            // sessionStorage.setItem("role", res.DT.payload.userRole.Roles.name);
-
             //sessionStorage.setItem("account", JSON.stringify(data));
             dispatch(FETCH_DATA_SUCCESS(res.DT.payload.userRole));
             toast.success(res.EM)
             // dungf cai nay de reload lai trang home (de load so luong item trong cart)
             // window.location.href = redirectUrl || "/";
-            navigate(redirectUrl || "/")
+            console.log("redirectUrl: ", redirectUrl)
+            //navigate(redirectUrl)
+            //return <Navigate to="/cart" />;
         }
         else {
             toast.error(res.EM)

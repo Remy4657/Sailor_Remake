@@ -120,6 +120,7 @@ const Header = () => {
 
                                     {username ? <li className="dropdown"><Link className="getstarted ">{username}</Link>
                                         <ul>
+                                            <li><Link to="/order">Đơn hàng đã mua</Link></li>
                                             <li><Link to="/" onClick={(e) => handleLogout(e)}>Log out</Link></li>
 
 

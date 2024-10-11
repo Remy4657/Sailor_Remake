@@ -50,7 +50,8 @@ const Dashboard = () => {
     }, [page, itemPerPage, listOrder]);
 
     const fetchOrder = async () => {
-        let res = await fetchAllOrder()
+        // truyen vao null de phan biet voi get all order by idAccount
+        let res = await fetchAllOrder(null)
         console.log("res order: ", res)
         if (res && res.data.DT) {
             refListOrder.current = res.data.DT
@@ -60,7 +61,6 @@ const Dashboard = () => {
     // handle modal
     const handleEdit = (item) => {
         setAction('Update')
-        console.log("item update: ", item)
         setIsShowModalCreate(true)
         setDataEdit(item)
     }

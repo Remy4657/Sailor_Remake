@@ -10,7 +10,7 @@ const updateCart = (data) => {
     return axios.put("http://localhost:8080/api/v1/update-cart-qty", { ...data })
 }
 const deleteCart = (item) => {
-    return axios.delete("http://localhost:8080/api/v1/delete-cart", { data: { id: item.Products.id } })
+    return axios.delete("http://localhost:8080/api/v1/delete-cart", { data: { id: item.Products.Cart_Detail.id } })
 }
 const initCart = (item) => {
     return axios.post("http://localhost:8080/api/v1/cart/init", { ...item })

@@ -47,8 +47,6 @@ const Checkout = () => {
         // fetchDetailCart()
 
     }, [])
-
-
     const fetchOrderFunc = async () => {
         let res = await fetchInfoOrder({ idAccount })
         console.log("res at checkout: ", res)

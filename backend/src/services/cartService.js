@@ -77,6 +77,7 @@ const initCart = async (item) => {
             [
                 ...List_CartDetail
             ],
+
             // { fields: ['ProductId', 'CartId', 'qty'] },
         );
 
@@ -154,7 +155,12 @@ const getCart = async (idAccount) => {
                 {
                     model: db.User, attributes: ["id", "email"]
                 },
-                { model: db.Product, attributes: ["id", "name", "description", "price", "image"] }
+                {
+                    model: db.Product, attributes: ["id", "name", "description", "price", "image"],
+                    through: {
+                        attributes: ["id", "ProductId", "CartId", "qty"],
+                    },
+                }
             ],
 
             raw: true,
@@ -239,10 +245,10 @@ const updateCart = async (data) => {
     }
 }
 
-const deleteCart = async (idProduct) => {
+const deleteCart = async (cartId) => {
     try {
-        //console.log('id product delete: ', id)
-        if (!idProduct) {
+        console.log('id cart detail id: ', cartId)
+        if (!cartId) {
             return {
                 EM: 'Not found id product to delete',
                 EC: 0,
@@ -257,7 +263,7 @@ const deleteCart = async (idProduct) => {
             // })
             await db.Cart_Detail.destroy({
                 where: {
-                    ProductId: idProduct
+                    id: cartId
                 }
             })
             return {

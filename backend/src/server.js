@@ -105,7 +105,6 @@ app.get('/api/v1/auth/google/callback/rm250320',
     });
 app.get('/login-google', function (req, res) {
     res.render('pages/auth');
-    //res.send("hello")
 });
 
 const PORT = process.env.PORT || 8080;

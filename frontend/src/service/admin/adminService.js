@@ -37,8 +37,8 @@ const deleteCategory = (data) => {
 }
 
 // order
-const fetchAllOrder = () => {
-    return axios.get("http://localhost:8080/api/v1/order/read")
+const fetchAllOrder = (idAccount) => {
+    return axios.post("http://localhost:8080/api/v1/order/read-all", { ...idAccount })
 }
 const createNewOrder = (data) => {
     return axios.post("http://localhost:8080/api/v1/admin/order/create", { ...data })
