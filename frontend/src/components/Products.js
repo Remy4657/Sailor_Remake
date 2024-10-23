@@ -10,11 +10,18 @@ const Product = (props) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { item } = props
+
+    // convert from string to array
+    if (item.imageReview !== "") {
+        const items = JSON.parse(item.imageReview)
+
+        //console.log("item: ", items)
+    }
+
     // let idAccount = sessionStorage.getItem("idAccount")
     const idAccount = useSelector((state) => state.user.account.idAccount);
 
     let cart = useSelector((state) => state.user.cart)
-    let lengthCart = cart.length
 
     const addCart = async (e) => {
 
@@ -55,7 +62,9 @@ const Product = (props) => {
     return (
         <div className="col-lg-3 col-md-6">
             <div className="single-product">
-                <img className="img-fluid" src={item.image} alt="" />
+                <div className="d-flex flex-column">
+                    <img className="img-fluid" src={item.image} alt="" />
+                </div>
                 <div className="product-details">
                     <h6>{item.name}</h6>
                     <div className="price">

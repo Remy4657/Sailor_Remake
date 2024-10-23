@@ -9,9 +9,10 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastContainer } from 'react-toastify';
 
+
 // import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-//import "bootstrap/dist/css/bootstrap.min.css";
-//import 'bootstrap/dist/js/bootstrap.js'; jjj 
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import 'bootstrap/dist/js/bootstrap.js'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -44,7 +44,7 @@ const ListProduct = () => {
         //let res = await fetchAllUser()
         if (res && res.data.DT) {
 
-            // console.log('all data: ', res.data.DT)
+            console.log('all data: ', res.data.DT)
             dispatch(INITIAL_LIST_PRODUCT(res.data.DT))
 
         }

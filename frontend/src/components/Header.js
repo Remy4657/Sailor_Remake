@@ -1,12 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { LOGOUT } from "../redux/actions/action";
 import { INITIAL_LIST_PRODUCT } from "../redux/actions/action";
 import './Header.scss'
 import { fetchAllProduct } from "../service/productService";
 import { userLogout } from "../service/userService";
-import { includes } from "lodash";
 import Autocomplete from "./Autocomplete/Autocomplete";
 
 const Header = () => {
@@ -120,6 +119,7 @@ const Header = () => {
 
                                     {username ? <li className="dropdown"><Link className="getstarted ">{username}</Link>
                                         <ul>
+                                            <li><Link to="/profile">Thông tin tài khoản</Link></li>
                                             <li><Link to="/order">Đơn hàng đã mua</Link></li>
                                             <li><Link to="/" onClick={(e) => handleLogout(e)}>Log out</Link></li>
 

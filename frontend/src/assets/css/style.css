@@ -150,8 +150,7 @@ ul.main-categories{
 }
 
 
-.navbar a,
-.navbar a:focus {
+.navbar a {
   display: flex;
   align-items: center;
   justify-content: space-between;

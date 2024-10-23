@@ -8,25 +8,31 @@ import { addToCart } from "../service/cartService"
 const ProductDetail = () => {
     const navigate = useNavigate()
     let { state } = useLocation();
-    let idAccount = sessionStorage.getItem("idAccount")
+    if (state.item.imageReview !== "") {
+        var items = JSON.parse(state.item.imageReview)
 
+        console.log("item: ", items)
+    }
+
+    //console.log("state: ", state.item.imageReview)
+
+    const auth = useSelector(state => state.user.auth)
+    const idAccount = useSelector(state => state.user.account.idAccount)
     let cart = useSelector((state) => state.user.cart)
     let lengthCart = cart.length
     const { id } = useParams()
     const [productDetail, setProductDetail] = useState([])
+    const [indexImage, setIndexImage] = useState(0)
+
     const fetDetailProduct = async () => {
         const res = await fetchProductDetail(id)
         if (res && res.data.DT) {
-            console.log(res)
             setProductDetail([res.data.DT])
-
         }
 
     }
-    console.log("state: ", state)
     const addCart = async (e) => {
-
-        if (idAccount && idAccount !== "") {
+        if (auth) {
             const existItem = cart.find((x) => x.Products.id === state.item.id);
             const qty = existItem ? existItem.Products.Cart_Detail.qty + 1 : 1;
 
@@ -38,46 +44,55 @@ const ProductDetail = () => {
             toast.success('Add product to cart success!')
         }
         else {
+
+
             navigate("/login?redirect=/cart")
         }
     }
-
-    // }
 
     useEffect(() => {
         fetDetailProduct()
     }, [])
 
+    const handleChangeImage = (index) => {
+        setIndexImage(index)
+    }
+
     return (
         <>
             {/* <!--================Single Product Area =================--> */}
-            {productDetail.map((item, index) => {
-                return (
-                    <div className="product_image_area">
-                        <div className="container">
-                            <div className="row s_product_inner">
-
-
-                                <div className="col-lg-6">
-                                    <div className="s_Product_carousel">
-                                        <div className="single-prd-item">
-                                            <img className="img-fluid" src={item.image} alt="" />
-                                        </div>
-
+            <div className="product_image_area">
+                <div className="container">
+                    <div className="row s_product_inner">
+                        <div className="col-lg-6">
+                            <div className="s_Product_carousel">
+                                <div className="single-prd-item">
+                                    <div>
+                                        <img className="img-fluid" src={items[indexImage]} alt="" />
+                                    </div>
+                                    <div className="d-flex flex-row">
+                                        {items.map((item, index) => {
+                                            return (
+                                                <img src={item} alt="" width={"100px"} height={"100px"} style={{ marginRight: "10px", cursor: "pointer" }} onClick={() => handleChangeImage(index)} />
+                                            )
+                                        })}
                                     </div>
                                 </div>
-                                <div className="col-lg-5 offset-lg-1">
-                                    <div className="s_product_text">
-                                        <h3>{item.name}</h3>
-                                        <h2>${item.price}</h2>
-                                        <ul className="list">
-                                            <li><a className="active" href="#"><span>Category</span> : Household</a></li>
-                                            <li><a href="#"><span>Availibility</span> : In Stock</a></li>
-                                        </ul>
-                                        <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
-                                            something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
-                                            during the winter.</p>
-                                        {/* <div className="product_count">
+
+                            </div>
+                        </div>
+                        <div className="col-lg-5 offset-lg-1">
+                            <div className="s_product_text">
+                                <h3>{state.item.name}</h3>
+                                <h2>${state.item.price}</h2>
+                                <ul className="list">
+                                    <li><a className="active" href="#"><span>Category</span> : Household</a></li>
+                                    <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+                                </ul>
+                                <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
+                                    something that can make your interior look awesome, and at the same time give you the pleasant warm feeling
+                                    during the winter.</p>
+                                {/* <div className="product_count">
                                             <label for="qty">Quantity:</label>
                                             <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" className="input-text qty" />
                                             <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
@@ -85,16 +100,16 @@ const ProductDetail = () => {
                                             <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
                                                 className="reduced items-count" type="button"><i className="lnr lnr-chevron-down"></i></button>
                                         </div> */}
-                                        <div className="card_area d-flex align-items-center">
-                                            <a className="primary-btn" href="#" onClick={(e) => addCart(e)}>Add to Cart</a>
-                                            {/* <a className="icon_btn" href="#"><i className="lnr lnr lnr-diamond"></i></a>
+                                <div className="card_area d-flex align-items-center">
+                                    <a className="primary-btn" href="#" onClick={(e) => addCart(e)}>Add to Cart</a>
+                                    {/* <a className="icon_btn" href="#"><i className="lnr lnr lnr-diamond"></i></a>
                                             <a className="icon_btn" href="#"><i className="lnr lnr lnr-heart"></i></a> */}
-                                        </div>
-                                    </div>
                                 </div>
+                            </div>
+                        </div>
 
 
-                                {/* <div className="col-lg-6">
+                        {/* <div className="col-lg-6">
                             <div className="s_Product_carousel">
                                 <div className="single-prd-item">
                                     <img className="img-fluid" src={require("../assets/img/img_/category/s-p1.jpg")} alt="" />
@@ -128,11 +143,11 @@ const ProductDetail = () => {
                                 </div>
                             </div>
                         </div> */}
-                            </div>
-                        </div>
                     </div>
-                )
-            })}
+                </div>
+            </div>
+
+
 
             {/* <!--================End Single Product Area =================-->
 

@@ -59,27 +59,6 @@ const Register = () => {
                         <div className="col-lg-6">
                             <div className="login_form_inner">
                                 <h3>Sigh up to enter</h3>
-                                {/* <form className="row login_form" action="" method="post" id="contactForm">
-                                    <div className="col-md-12 form-group">
-                                        <input type="email" className="form-control" id="name" name="name" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-12 form-group">
-                                        <input type="text" className="form-control" id="name" name="name" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-12 form-group">
-                                        <input type="text" className="form-control" id="name" name="name" placeholder="Phone number" onChange={(e) => setPhone(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-12 form-group">
-                                        <input type="password" className="form-control" id="name" name="name" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-12 form-group">
-                                        <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" onChange={(e) => setConfirmPassword(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-12 form-group">
-                                        <button type="submit" value="submit" className="primary-btn" onClick={(e) => { handleRegister(e) }}>Register</button>
-                                        Are you had account?<Link className='text-info' to="/login"> Login</Link>
-                                    </div>
-                                </form> */}
 
                                 <form onSubmit={handleSubmit(handleRegister)} className="row login_form" action="" method="post" id="contactForm">
                                     <div className="col-md-12 form-group">

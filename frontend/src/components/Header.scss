@@ -32,25 +32,14 @@ input[type="text"].input-search.hidden {
 }
 li.cart{
   position: relative;
+  margin: 0 30px;
 }
 li.cart a span{
   position: absolute;
   right: -10px;
-  top: -10px;
+  top: -24px;
   
 }
-// li ul.account_dropdown {
-//   display: none;
-// }
-// li ul.account_dropdown li a {
-//   position: fixed;
-//   z-index: 1;
-//   right: 7rem;
-//   top: 3.5rem;
-//   background-color: #000;
-//   color: #fff;
-// }
-
-// li a.getstarted.dropdown:hover + .account_dropdown {
-//   display: block;
-// }
+li.cart a{
+  padding: 0;
+}

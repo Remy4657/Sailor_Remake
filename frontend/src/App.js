@@ -35,6 +35,7 @@ import { INITIAL_CART_REDUX, INITIAL_CARTALL_REDUX, FETCH_DATA_SUCCESS, FETCH_FI
 import { refresh } from "./service/userService";
 import Pagination from "./components/Pagination";
 import BounceLoader from "react-spinners/BounceLoader";
+import Profile from "./pages/Profile";
 
 function App() {
   const navigate = useNavigate()
@@ -50,7 +51,6 @@ function App() {
   const isAdminRoute = location.pathname.startsWith('/admin')
   var a = []
 
-  //let idAccount = sessionStorage.getItem("idAccount")
 
   const handleRefresh = async () => {
     const res = await refresh()
@@ -66,7 +66,6 @@ function App() {
       }
       dispatch(
         FETCH_DATA_SUCCESS(
-          //sessionStorage.getItem("userAccount"),
           userInfo
         )
       );
@@ -91,7 +90,6 @@ function App() {
     //init cart o home no se chay truoc init cart o App.js nen khong co idaccount o trang home.js
     setTimeout(() => {
       dispatch(FETCH_FINISH())
-
     }, 2000)
   }, [idAccount])
 
@@ -154,6 +152,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route exact path="/" element={<Home />} />
             <Route exact path="/order" element={<Order />} />
+            <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/pa" element={<Pagination />} />
             {/* admin */}
             <Route exact path="/admin/login" element={<AdminLogin />} />
