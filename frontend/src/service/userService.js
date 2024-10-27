@@ -28,9 +28,11 @@ const refreshAccessToken = async () => {
 const setNewAccessToken = async (newAccessToken) => {
     return axios.post("/api/v1/set_new_access_token", { newAccessToken: newAccessToken })
 }
-
+const changePassword = (data) => {
+    return axios.post("/api/v1/user/change-password", { ...data })
+}
 
 export {
     userRegister, userLogin, userCheckout, sendIdAccount, userLogout,
-    refresh, refreshAccessToken, setNewAccessToken, userLoginByGoogle
+    refresh, refreshAccessToken, setNewAccessToken, userLoginByGoogle, changePassword
 }

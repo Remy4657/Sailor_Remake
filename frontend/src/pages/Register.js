@@ -81,8 +81,14 @@ const Register = () => {
                                         )}
                                     </div>
                                     <div className="col-md-12 form-group mt-2">
-                                        <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" {...register("cfpassword", { required: true })} />
+                                        <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" {...register("cfpassword", {
+                                            required: true,
+                                            validate: (value) =>
+                                                value === watch("password") || "Confirm password do not match with new password."
+                                        })} />
                                         {errors.cfpassword && <span className='error'>Confirm password is required.</span>}
+                                        {errors.cfpassword?.message && <span className="error">{errors.cfpassword.message}</span>}
+
                                     </div>
                                     <div className="col-md-12 form-group mt-4">
                                         <input type="submit" value="Register" className="primary-btn" />

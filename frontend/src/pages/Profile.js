@@ -2,6 +2,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { changePassword } from '../service/userService';
 
 const Profile = () => {
     const username = useSelector((state) => state.user.account.username);
@@ -14,8 +16,14 @@ const Profile = () => {
         formState: { errors },
     } = useForm()
 
-    const handleChangePassword = (data) => {
-        console.log("data: ", data)
+    const handleChangePassword = async (data) => {
+        const res = await changePassword({ ...data, email })
+        if (res && res.EC === 0) {
+            toast.error(res.EM)
+        }
+        else {
+            toast.success(res.EM)
+        }
     }
     return (
         <div style={{ margin: "150px 0" }}>
@@ -99,11 +107,16 @@ const Profile = () => {
                                                 </div>
                                                 <div className="col-md-12 form-group mt-3 d-flex flex-column">
                                                     <label className="w-25">Confirm password:</label>
-                                                    <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" {...register("cfPassword", { required: true, minLength: 4 })} />
+                                                    <input type="password" className="form-control" id="name" name="name" placeholder="Confirm password" {...register("cfPassword", {
+                                                        required: true,
+                                                        validate: (value) =>
+                                                            value === watch("newPassword") || "Confirm passwords do not match with new password."
+                                                    })} />
                                                     {errors.cfPassword?.type === "required" && <span className='error'>Password is required.</span>}
                                                     {errors.cfPassword?.type === "minLength" && (
                                                         <span className="error">Password must be at least 4 characters long.</span>
                                                     )}
+                                                    {errors.cfPassword?.message && <span className="error">{errors.cfPassword.message}</span>}
                                                 </div>
                                             </div>
                                             <div class="col-md-2 mt-3">

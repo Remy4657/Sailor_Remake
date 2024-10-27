@@ -74,6 +74,48 @@ const userRegister = async (data) => {
         }
     }
 }
+const userChangePassword = async (data) => {
+    try {
+        console.log("data ser: ", data)
+        const user = await db.User.findOne({
+            where: {
+                email: data.email
+            },
+            raw: true,
+        });
+
+        if (user && checkPassword(data.oldPassword, user.password)) {
+            // hash password:
+            const hashPassword = bcrypt.hashSync(data.newPassword, salt);
+            await db.User.update(
+                { password: hashPassword },
+                {
+                    where: { email: data.email },
+                }
+            );
+            return {
+                EM: 'Change password success',
+                EC: 1,
+                DT: []
+            }
+        }
+        else {
+            return {
+                EM: 'Invalid password',
+                EC: 0,
+                DT: []
+            }
+        }
+
+    } catch (error) {
+        console.log(error)
+        return {
+            EM: 'something wrong from user',
+            EC: -1,
+            DT: []
+        }
+    }
+}
 
 const userCheckout = async (data) => {
     try {
@@ -389,5 +431,5 @@ const sendEmail = async (idAccount) => {
     }
 }
 module.exports = {
-    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail
+    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail, userChangePassword
 }

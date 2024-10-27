@@ -23,6 +23,28 @@ const userRegisterFunc = async (req, res) => {
         });
     }
 }
+const userChangePasswordFunc = async (req, res) => {
+    try {
+
+        //console.log('req user register body: ', req.body)
+        let data = await userService.userChangePassword(req.body)
+        //console.log('req data register: ', data)
+
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            EM: "error from server",
+            EC: "-1",
+            DT: "",
+        });
+    }
+}
 const refreshController = async (req, res) => {
     try {
         //console.log("res refresh: ", res)
@@ -239,5 +261,5 @@ const sendEmail = async (req, res) => {
 }
 module.exports = {
     userRegisterFunc, userLoginFunc, userCheckoutFunc, adminLoginFunc, adminRegisterFunc, userLogoutFunc,
-    refreshToken, setNewAccessToken, refreshController, sendEmail
+    refreshToken, setNewAccessToken, refreshController, sendEmail, userChangePasswordFunc
 }

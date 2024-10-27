@@ -36,6 +36,9 @@ const initApiRoutes = (app, passport) => {
     )
     router.get("/refresh_access_token", userController.refreshToken)
     router.post("/set_new_access_token", userController.setNewAccessToken)
+    router.post("/user/change-password",
+        userController.userChangePasswordFunc
+    )
     // router.post("/user/send-idaccount",
     //     userController.sendIdAccountFunc
     // )
