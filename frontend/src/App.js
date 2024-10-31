@@ -37,6 +37,7 @@ import Pagination from "./components/Pagination";
 import BounceLoader from "react-spinners/BounceLoader";
 import Profile from "./pages/Profile";
 
+
 function App() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -84,6 +85,7 @@ function App() {
     // if (!username) {
     //   navigate("/login?redirect=/cart")
     // }
+
     handleRefresh()
     fetchCartF()
     // khi refresh ma khong fetch cart thif ko update dc so luong item hien o header vi 

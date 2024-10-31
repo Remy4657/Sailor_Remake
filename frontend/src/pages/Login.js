@@ -95,11 +95,7 @@ const Login = () => {
                                         <input type="password" className="form-control" id="name" name="name" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
                                     </div>
 
-                                    <div className="col-md-12 form-group">
-                                        <button type="submit" value="submit" className="primary-btn" onClick={(e) => handleLogin(e)}>Log In</button>
-                                        <Link to="http://localhost:8080/login-google">login by google</Link>
-                                        <a href="#">Forgot Password?</a>
-                                    </div>
+                                   
                                 </form> */}
 
                                 <form onSubmit={handleSubmit(handleLogin)} className="row login_form">
@@ -126,7 +122,10 @@ const Login = () => {
 
                                     <div className="col-md-12 form-group mt-5">
                                         <input type="submit" value="LOGIN" className="primary-btn" />
+                                        <Link to="http://localhost:8080/login-google">login by google</Link>
+
                                     </div>
+
                                 </form>
 
                             </div>

@@ -8,7 +8,7 @@ const cors = require('cors')
 const session = require('express-session');
 const passport = require('passport');
 import { connection } from "./config/connectDB";
-import { method } from "bluebird";
+import jwt from 'jsonwebtoken'
 const cookieParser = require('cookie-parser');
 require("dotenv").config(); // giúp lấy các biến trong file .env
 
@@ -60,13 +60,13 @@ const corsOptions = {
     // có cho phép các đường link define bên dưới có được gửi cookie hay không.
     credentials: true,
     // define các đường link được gửi request đến server
-    origin: ['http://localhost:3000', 'http://localhost:3001', 'https://accounts.google.com/'], // Whitelist the domains you want to allow
+    origin: ['http://localhost:3000', 'http://localhost:3001'], // Whitelist the domains you want to allow
     method: "GET, POST, PUT, DELETE",
 
 };
 app.use(cors(corsOptions)); // Use the cors middleware with your options
 app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000', 'https://accounts.google.com/'];
+    const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000'];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
@@ -104,6 +104,8 @@ app.get('/api/v1/auth/google/callback/rm250320',
         res.redirect('http://localhost:3000');
     });
 app.get('/login-google', function (req, res) {
+    const decoded = jwt.decode('ya29.a0AeDClZCa1H7tWZ00wGPVBe8ISy05Ojg-WQJ-HyuRYXBbPN0ab4_cGrHvjzcxjcrjR2BhwCqSy0bDvZAqs5GxfOgy4jNKcUl88P3SpA6GA_2eyU_0xypFzW4McrfHWVNAa4JcedywQ99seTnyUy69rDZ9WSjUj9iCUbnmaCgYKAR0SAQ4SFQHGX2MizZjdX-HuOuhKgJtzUf74Jw0171');
+    console.log("decode: ", decoded);
     res.render('pages/auth');
 });
 
