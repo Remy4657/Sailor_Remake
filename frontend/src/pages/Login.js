@@ -11,6 +11,7 @@ import {
     FETCH_DATA_ERROR,
 } from "../redux/actions/action";
 import { useForm } from "react-hook-form"
+import Button from 'react-bootstrap/esm/Button'
 
 const Login = () => {
     const { search } = useLocation();
@@ -28,12 +29,11 @@ const Login = () => {
         let res = await userLogin(data)
 
         if (res && res && +res.EC === 1) {
-
-
             let idAccount = res.DT.UserId
             await inserUserToCart({ idAccount })
             //sessionStorage.setItem("account", JSON.stringify(data));
             dispatch(FETCH_DATA_SUCCESS(res.DT.payload.userRole));
+            console.log("userRole: ", res.DT.payload.userRole)
             toast.success(res.EM)
             // dungf cai nay de reload lai trang home (de load so luong item trong cart)
             // window.location.href = redirectUrl || "/";
@@ -46,7 +46,26 @@ const Login = () => {
             dispatch(FETCH_DATA_ERROR());
         }
     }
+    const handleLoginGoogle = () => {
+        window.location.href = "http://localhost:8080/api/v1/login-google"
+        const username = localStorage.getItem("username");
+        const email = localStorage.getItem("email");
+        const idAccount = localStorage.getItem("idAccount");
+        const role = localStorage.getItem("role");
 
+        const userRole = {
+            email: email,
+            username: username,
+            idAccount: idAccount,
+            Roles:{
+                name: role
+            }
+        }
+        
+        dispatch(FETCH_DATA_SUCCESS(userRole));
+
+
+    }
     const {
         register,
         handleSubmit,
@@ -122,8 +141,7 @@ const Login = () => {
 
                                     <div className="col-md-12 form-group mt-5">
                                         <input type="submit" value="LOGIN" className="primary-btn" />
-                                        <Link to="http://localhost:8080/login-google">login by google</Link>
-
+                                        <Button onClick={() => handleLoginGoogle()}>login by google</Button>
                                     </div>
 
                                 </form>

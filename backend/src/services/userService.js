@@ -1,3 +1,4 @@
+
 import db from "../models";
 const { Op } = require("sequelize");
 import bcrypt from "bcryptjs";
@@ -7,7 +8,8 @@ require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 const nodemailer = require('nodemailer');
 import orderService from "./orderService"
-
+const { LocalStorage } = require('node-localstorage');
+const localStorage = new LocalStorage('./scratch'); // Tạo thư mục để lưu dữ liệu
 
 const checkEmailExist = async (userEmail) => {
     let user = await db.User.findOne({
@@ -194,7 +196,8 @@ const userLogin = async (data) => {
                 [Op.or]: [
                     { username: data.username },
                     { email: data.username }
-                ]
+                ],
+                [Op.and]: {type: "password"}
 
             },
             raw: true,
@@ -430,6 +433,45 @@ const sendEmail = async (idAccount) => {
         };
     }
 }
+const loginByGoogle_Ser = async (userProfile) => {
+    try {
+        console.log("user profile ser ", userProfile)
+            const payload = {
+                userRole: {
+                    id: userProfile.id,
+                    username: userProfile.displayName,
+                    email: userProfile.emails[0].value,
+                    Roles: {
+                        name: "user"
+                    }
+                }
+            }
+            localStorage.setItem("username", payload.userRole.username);
+            localStorage.setItem("email", payload.userRole.email);
+            localStorage.setItem("idAccount", payload.userRole.id);
+            localStorage.setItem("role", payload.userRole.Roles.name);
+            
+            console.log("payload gg: ", payload)
+            const obj_token = jwtAction.GenerateToken(payload)
+            return {
+                EM: 'Login success',
+                EC: 1,
+                DT: {
+                    payload: payload,
+                    access_token: obj_token.access_token,
+                    refresh_token: obj_token.refresh_token,
+                    UserId: userProfile.id
+                }
+            }
+    } catch (error) {
+        console.log(error)
+        return {
+            EM: 'something wrong from user',
+            EC: -1,
+            DT: []
+        }
+    }
+}
 module.exports = {
-    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail, userChangePassword
+    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail, userChangePassword, loginByGoogle_Ser
 }

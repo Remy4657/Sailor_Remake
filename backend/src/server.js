@@ -1,6 +1,5 @@
 import express from "express";
 import configViewEngine from "./config/viewEngine";
-// import initWebRoutes from "./routes/web";
 import initApiRoutes from "./routes/api";
 import initApiAdminRoutes from './routes/apiAdmin'
 import bodyParser from "body-parser";
@@ -8,7 +7,7 @@ const cors = require('cors')
 const session = require('express-session');
 const passport = require('passport');
 import { connection } from "./config/connectDB";
-import jwt from 'jsonwebtoken'
+
 const cookieParser = require('cookie-parser');
 require("dotenv").config(); // giúp lấy các biến trong file .env
 
@@ -31,29 +30,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser(function (user, cb) {
+passport.serializeUser(function (user, cb) { // lưu trữ một thông tin định danh của người dùng vào session (userId) sau khi da login
     cb(null, user);
 });
 
-passport.deserializeUser(function (obj, cb) {
+passport.deserializeUser(function (obj, cb) { // decode userId
     cb(null, obj);
 });
-
-/*  Google AUTH  */
-var userProfile;
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const GOOGLE_CLIENT_ID = '440076098403-0p5u9ddof8ig9ciagpvdv7q6h4e8jfac.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = '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';
-passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8080/api/v1/auth/google/callback/rm250320"
-},
-    function (accessToken, refreshToken, profile, done) {
-        userProfile = { ...profile, accessToken: accessToken, refreshToken: refreshToken };
-        return done(null, userProfile);
-    }
-));
 
 // Define the CORS options
 const corsOptions = {
@@ -85,29 +68,8 @@ connection();
 
 //init web route
 // initWebRoutes(app);
-initApiRoutes(app, passport, userProfile);
+initApiRoutes(app, passport);
 initApiAdminRoutes(app)
-
-
-/*  Google AUTH  */
-app.get('/error', (req, res) => res.send("error logging in"));
-
-app.get('/api/v1/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-app.get('/api/v1/auth/google/callback/rm250320',
-    passport.authenticate('google', { failureRedirect: '/error' }),
-    function (req, res) {
-        var a;
-        console.log("userProfile: ", userProfile)
-        // Successful authentication, redirect success.
-        res.redirect('http://localhost:3000');
-    });
-app.get('/login-google', function (req, res) {
-    const decoded = jwt.decode('ya29.a0AeDClZCa1H7tWZ00wGPVBe8ISy05Ojg-WQJ-HyuRYXBbPN0ab4_cGrHvjzcxjcrjR2BhwCqSy0bDvZAqs5GxfOgy4jNKcUl88P3SpA6GA_2eyU_0xypFzW4McrfHWVNAa4JcedywQ99seTnyUy69rDZ9WSjUj9iCUbnmaCgYKAR0SAQ4SFQHGX2MizZjdX-HuOuhKgJtzUf74Jw0171');
-    console.log("decode: ", decoded);
-    res.render('pages/auth');
-});
 
 const PORT = process.env.PORT || 8080;
 

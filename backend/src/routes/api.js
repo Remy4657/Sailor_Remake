@@ -112,24 +112,48 @@ const initApiRoutes = (app, passport) => {
 
     router.post("/send-email", userController.sendEmail)
 
-    // login by google
-    // router.get('/auth/google',
-    //     passport.authenticate('google', { scope: ['profile', 'email'] }),
-    //     function (req, res) {
-    //         // Successful authentication, redirect success.
-    //         console.log("userProfile 1: ")
-    //         //res.redirect('/');
-    //     }
-    // );
+    /*  Google AUTH   */
+    var userProfile;
+    const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    const GOOGLE_CLIENT_ID = '440076098403-0p5u9ddof8ig9ciagpvdv7q6h4e8jfac.apps.googleusercontent.com';
+    const GOOGLE_CLIENT_SECRET = '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';
+    passport.use(new GoogleStrategy({
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/api/v1/auth/google/callback/rm250320"
+    },
+        function (accessToken, refreshToken, profile, done) {
+            userProfile = { ...profile, accessToken: accessToken, refreshToken: refreshToken };
+            return done(null, userProfile);
+        }
+    ));
+    /*  Google AUTH  */
+    router.get('/error', (req, res) => res.send("error logging in"));
 
-    // router.get('/auth/google/callback/rm250320',
-    //     passport.authenticate('google', { failureRedirect: '/error' }),
-    //     function (req, res) {
-    //         // Successful authentication, redirect success.
-    //         console.log("userProfile 2: ")
-    //         //res.redirect('/');
-    //     }
-    // );
+    router.get('/auth/google',
+        passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+    router.get("/category/read",
+        categoryController.readFunc
+    )
+    router.get('/auth/google/callback/rm250320',
+        passport.authenticate('google', { failureRedirect: '/api/v1/error' }),
+        async function (req, res, next) {
+            if (userProfile) {
+                req.userProfile = userProfile
+                next()
+            }
+            //await userController.loginByGoogle
+
+            // Successful authentication, redirect success.
+            //res.redirect('http://localhost:3000');
+        
+        },
+        userController.loginByGoogle,
+    );
+    router.get('/login-google', function (req, res) {
+        res.render('pages/auth');
+    });
     return app.use("/api/v1", router);
 };
 export default initApiRoutes;

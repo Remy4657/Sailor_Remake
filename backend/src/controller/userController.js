@@ -259,7 +259,29 @@ const sendEmail = async (req, res) => {
         });
     }
 }
+const loginByGoogle = async (req, res) => {
+    try {
+        const data = await userService.loginByGoogle_Ser(req.userProfile)
+        if (data && data.EC === 1) {
+            res.cookie('access_token', data.DT.access_token, { httpOnly: true })
+            res.cookie('refresh_token', data.DT.refresh_token, { httpOnly: true })
+        }
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            EM: "error from server",
+            EC: "-1",
+            DT: "",
+        });
+    }
+}
 module.exports = {
     userRegisterFunc, userLoginFunc, userCheckoutFunc, adminLoginFunc, adminRegisterFunc, userLogoutFunc,
-    refreshToken, setNewAccessToken, refreshController, sendEmail, userChangePasswordFunc
+    refreshToken, setNewAccessToken, refreshController, sendEmail, userChangePasswordFunc, loginByGoogle
 }
