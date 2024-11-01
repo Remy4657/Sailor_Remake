@@ -9,6 +9,7 @@ import categoryController from '../controller/categoryController'
 import paymentController from '../controller/paymentController'
 import shippingController from '../controller/shippingController'
 import JWTAction from "../jwt/JWTAction"
+import userService from '../services/userService'
 
 const router = express.Router();
 
@@ -138,18 +139,17 @@ const initApiRoutes = (app, passport) => {
     )
     router.get('/auth/google/callback/rm250320',
         passport.authenticate('google', { failureRedirect: '/api/v1/error' }),
-        async function (req, res, next) {
+        function (req, res, next) {
             if (userProfile) {
                 req.userProfile = userProfile
-                next()
-            }
-            //await userController.loginByGoogle
-
-            // Successful authentication, redirect success.
-            //res.redirect('http://localhost:3000');
         
+            }
+            next()
         },
         userController.loginByGoogle,
+        async function ( req, res) {
+            res.redirect('http://localhost:3000');
+        }
     );
     router.get('/login-google', function (req, res) {
         res.render('pages/auth');

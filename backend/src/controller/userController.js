@@ -1,4 +1,5 @@
 import userService from '../services/userService'
+import cartService from '../services/cartService'
 import orderService from "../services/orderService"
 
 const userRegisterFunc = async (req, res) => {
@@ -259,18 +260,26 @@ const sendEmail = async (req, res) => {
         });
     }
 }
-const loginByGoogle = async (req, res) => {
+const loginByGoogle = async (req, res, next) => {
     try {
+        // create user google in table user
+        let dataUserRegister = await userService.userGoogleRegister(req.userProfile)
+
+        // init cart 
+        await cartService.addUserToCart(100000)
         const data = await userService.loginByGoogle_Ser(req.userProfile)
+
+        // process login (create access_token, refresh_token)
         if (data && data.EC === 1) {
             res.cookie('access_token', data.DT.access_token, { httpOnly: true })
             res.cookie('refresh_token', data.DT.refresh_token, { httpOnly: true })
         }
-        return res.status(200).json({
-            EM: data.EM,
-            EC: data.EC,
-            DT: data.DT,
-        });
+        // return res.status(200).json({
+        //     EM: data.EM,
+        //     EC: data.EC,
+        //     DT: data.DT,
+        // });
+        next()
 
     } catch (error) {
         console.log(error)

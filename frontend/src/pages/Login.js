@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { userLogin } from '../service/userService'
 import { inserUserToCart } from '../service/cartService'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useLocation, Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -48,24 +48,23 @@ const Login = () => {
     }
     const handleLoginGoogle = () => {
         window.location.href = "http://localhost:8080/api/v1/login-google"
-        const username = localStorage.getItem("username");
-        const email = localStorage.getItem("email");
-        const idAccount = localStorage.getItem("idAccount");
-        const role = localStorage.getItem("role");
+        // const username = localStorage.getItem("username");
+        // const email = localStorage.getItem("email");
+        // const idAccount = localStorage.getItem("idAccount");
+        // const role = localStorage.getItem("role");
 
-        const userRole = {
-            email: email,
-            username: username,
-            idAccount: idAccount,
-            Roles:{
-                name: role
-            }
-        }
+        // const userRole = {
+        //     email: email,
+        //     username: username,
+        //     idAccount: idAccount,
+        //     Roles:{
+        //         name: role
+        //     }
+        // }
         
-        dispatch(FETCH_DATA_SUCCESS(userRole));
-
-
+        // dispatch(FETCH_DATA_SUCCESS(userRole));
     }
+   
     const {
         register,
         handleSubmit,

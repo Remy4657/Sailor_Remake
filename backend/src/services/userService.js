@@ -435,10 +435,9 @@ const sendEmail = async (idAccount) => {
 }
 const loginByGoogle_Ser = async (userProfile) => {
     try {
-        console.log("user profile ser ", userProfile)
             const payload = {
                 userRole: {
-                    id: userProfile.id,
+                    id: 100000,
                     username: userProfile.displayName,
                     email: userProfile.emails[0].value,
                     Roles: {
@@ -451,7 +450,6 @@ const loginByGoogle_Ser = async (userProfile) => {
             localStorage.setItem("idAccount", payload.userRole.id);
             localStorage.setItem("role", payload.userRole.Roles.name);
             
-            console.log("payload gg: ", payload)
             const obj_token = jwtAction.GenerateToken(payload)
             return {
                 EM: 'Login success',
@@ -460,7 +458,7 @@ const loginByGoogle_Ser = async (userProfile) => {
                     payload: payload,
                     access_token: obj_token.access_token,
                     refresh_token: obj_token.refresh_token,
-                    UserId: userProfile.id
+                    UserId: payload.userRole.id
                 }
             }
     } catch (error) {
@@ -472,6 +470,37 @@ const loginByGoogle_Ser = async (userProfile) => {
         }
     }
 }
+const userGoogleRegister = async (data) => {
+    try {
+        //console.log("data google login: ", data)
+        const id = 100000
+        const username = data.displayName
+        const email = data.emails[0].value
+
+        let isEmailExist = await checkEmailExist(email);
+        if (isEmailExist === true) {
+            return {
+                EM: "The email is already exist",
+                EC: 0,
+                DT: 'email'
+            };
+        }
+        //console.log('data new user: ', data)
+        await db.User.create({ id: id, username: username, email: email, type: "google" }) //, password: hashPassword
+        return {
+            EM: 'Create new user ok',
+            EC: 1,
+            DT: []
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            EM: 'something wrong from user',
+            EC: -1,
+            DT: []
+        }
+    }
+}
 module.exports = {
-    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail, userChangePassword, loginByGoogle_Ser
+    userRegister, userLogin, userCheckout, adminLogin, adminRegister, refreshToken, sendEmail, userChangePassword, loginByGoogle_Ser, userGoogleRegister
 }

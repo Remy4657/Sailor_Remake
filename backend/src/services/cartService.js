@@ -377,6 +377,7 @@ const updateShipping = async (data) => {
 }
 
 const addUserToCart = async (idAccount) => {
+    console.log("idAccount add user to cart", idAccount)
     try {
         if (!idAccount) {
             return {
