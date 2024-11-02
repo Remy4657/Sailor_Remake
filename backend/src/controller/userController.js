@@ -264,9 +264,14 @@ const loginByGoogle = async (req, res, next) => {
     try {
         // create user google in table user
         let dataUserRegister = await userService.userGoogleRegister(req.userProfile)
+        console.log("dataUserRegister.DT", dataUserRegister.DT)
+        // neu co user vua moi duoc tao
+        if (dataUserRegister.DT) {
+            const idUserJustCteate = dataUserRegister.DT.dataValues.id
+            // init cart 
+            await cartService.addUserToCart(idUserJustCteate)
+        }
 
-        // init cart 
-        await cartService.addUserToCart(100000)
         const data = await userService.loginByGoogle_Ser(req.userProfile)
 
         // process login (create access_token, refresh_token)

@@ -8,6 +8,7 @@ require("dotenv").config();
 const salt = bcrypt.genSaltSync(10);
 const nodemailer = require('nodemailer');
 import orderService from "./orderService"
+import { raw } from "body-parser";
 const { LocalStorage } = require('node-localstorage');
 const localStorage = new LocalStorage('./scratch'); // Tạo thư mục để lưu dữ liệu
 
@@ -58,9 +59,13 @@ const userRegister = async (data) => {
         // hash password:
         const hashPassword = bcrypt.hashSync(data.password, salt);
 
-
-        //console.log('data new user: ', data)
-        await db.User.create({ username: data.username, email: data.email, phone: data.phone, password: hashPassword }) //, password: hashPassword
+        // await db.User.bulkCreate(
+        //     [
+        //         { username: data.username, email: data.email, phone: data.phone, password: hashPassword }
+        //     ],
+        // );
+        //await db.User.build({ username: data.username, email: data.email, phone: data.phone, password: hashPassword }).save()
+       await db.User.create({ username: data.username, email: data.email, phone: data.phone, password: hashPassword, type: "password" })
         // await db.Cart.create({ username: data.username, email: data.email, phone: data.phone, password: data.password })
         return {
             EM: 'Create new user ok',
@@ -72,7 +77,7 @@ const userRegister = async (data) => {
         return {
             EM: 'something wrong from user',
             EC: -1,
-            DT: []
+            DT: error
         }
     }
 }
@@ -189,7 +194,6 @@ const UserRole = async (user) => {
 }
 const userLogin = async (data) => {
     try {
-
         //await db.User.create({ username: data.username, email: data.email, phone: data.phone, password: data.password }) //, password: hashPassword
         const user = await db.User.findOne({
             where: {
@@ -473,7 +477,7 @@ const loginByGoogle_Ser = async (userProfile) => {
 const userGoogleRegister = async (data) => {
     try {
         //console.log("data google login: ", data)
-        const id = 100000
+        const id = 1000
         const username = data.displayName
         const email = data.emails[0].value
 
@@ -482,15 +486,17 @@ const userGoogleRegister = async (data) => {
             return {
                 EM: "The email is already exist",
                 EC: 0,
-                DT: 'email'
+                DT: null
             };
         }
         //console.log('data new user: ', data)
-        await db.User.create({ id: id, username: username, email: email, type: "google" }) //, password: hashPassword
+        const newUser = await db.User.create(
+            { username: username, email: email, type: "google" }
+        )
         return {
             EM: 'Create new user ok',
             EC: 1,
-            DT: []
+            DT: newUser
         }
     } catch (error) {
         console.log(error)

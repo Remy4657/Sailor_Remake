@@ -9,12 +9,13 @@ const Register = () => {
 
     const handleRegister = async (data) => {
         let res = await userRegister(data)
-        if (res && res.EC === 0) {
-            toast.error(res.EM)
-        }
-        else {
+        if (res && res.EC === 1) {
             toast.success(res.EM)
             navigate("/login")
+        }
+        else {
+            toast.error(res.EM)
+
         }
         console.log("data: ", data)
     }
