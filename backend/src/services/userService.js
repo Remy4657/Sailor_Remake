@@ -241,6 +241,83 @@ const userLogin = async (data) => {
     };
   }
 };
+const userLogin2 = async (data) => {
+  try {
+    if (data.type === "provider") {
+      const user = await db.User.findOne({
+        where: {
+          [Op.or]: [{ username: data.username }, { email: data.username }],
+          [Op.and]: { type: "provider" },
+        },
+        raw: true,
+      });
+
+      if (user) {
+        const userRole = await UserRole(user);
+        const { Roles, ...rest } = userRole;
+
+        const obj_token = jwtAction.GenerateToken(userRole);
+        return {
+          status: 200,
+          EM: "Login success",
+          EC: 1,
+          DT: {
+            ...rest,
+            role: Roles.name,
+            access_token: obj_token.access_token,
+            refresh_token: obj_token.refresh_token,
+          },
+        };
+      } else {
+        return {
+          EM: "Invalid password or username",
+          EC: 0,
+          DT: [],
+        };
+      }
+    } else {
+      console.log("[userService] credentical");
+      const user = await db.User.findOne({
+        where: {
+          [Op.or]: [{ username: data.username }, { email: data.username }],
+          [Op.and]: { type: "password" },
+        },
+        raw: true,
+      });
+
+      if (user && checkPassword(data.password, user.password)) {
+        const userRole = await UserRole(user);
+        const { Roles, ...rest } = userRole;
+
+        const obj_token = jwtAction.GenerateToken(userRole);
+        return {
+          status: 200,
+          EM: "Login success",
+          EC: 1,
+          DT: {
+            ...rest,
+            role: Roles.name,
+            access_token: obj_token.access_token,
+            refresh_token: obj_token.refresh_token,
+          },
+        };
+      } else {
+        return {
+          EM: "Invalid password or username",
+          EC: 0,
+          DT: [],
+        };
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      EM: "something wrong from user",
+      EC: -1,
+      DT: [],
+    };
+  }
+};
 const refreshToken = async (refresh_token) => {
   try {
     if (refresh_token) {
@@ -502,84 +579,6 @@ const userGoogleRegister = async (data) => {
       EC: 1,
       DT: newUser,
     };
-  } catch (error) {
-    console.log(error);
-    return {
-      EM: "something wrong from user",
-      EC: -1,
-      DT: [],
-    };
-  }
-};
-const userLogin2 = async (data) => {
-  try {
-    console.log("data login: ", data);
-    if (data.type === "provider") {
-      const user = await db.User.findOne({
-        where: {
-          [Op.or]: [{ username: data.username }, { email: data.email }],
-          [Op.and]: { type: "provider" },
-        },
-        raw: true,
-      });
-
-      if (user) {
-        const userRole = await UserRole(user);
-        const { Roles, ...rest } = userRole;
-
-        const obj_token = jwtAction.GenerateToken(userRole);
-        return {
-          status: 200,
-          EM: "Login success",
-          EC: 1,
-          DT: {
-            ...rest,
-            role: Roles.name,
-            access_token: obj_token.access_token,
-            refresh_token: obj_token.refresh_token,
-          },
-        };
-      } else {
-        return {
-          EM: "Invalid password or username",
-          EC: 0,
-          DT: [],
-        };
-      }
-    } else {
-      console.log("[userService] credentical");
-      const user = await db.User.findOne({
-        where: {
-          [Op.or]: [{ username: data.username }, { email: data.email }],
-          [Op.and]: { type: "password" },
-        },
-        raw: true,
-      });
-
-      if (user && checkPassword(data.password, user.password)) {
-        const userRole = await UserRole(user);
-        const { Roles, ...rest } = userRole;
-
-        const obj_token = jwtAction.GenerateToken(userRole);
-        return {
-          status: 200,
-          EM: "Login success",
-          EC: 1,
-          DT: {
-            ...rest,
-            role: Roles.name,
-            access_token: obj_token.access_token,
-            refresh_token: obj_token.refresh_token,
-          },
-        };
-      } else {
-        return {
-          EM: "Invalid password or username",
-          EC: 0,
-          DT: [],
-        };
-      }
-    }
   } catch (error) {
     console.log(error);
     return {
