@@ -513,10 +513,11 @@ const userGoogleRegister = async (data) => {
 };
 const userLogin2 = async (data) => {
   try {
+    console.log("data login: ", data);
     if (data.type === "provider") {
       const user = await db.User.findOne({
         where: {
-          [Op.or]: [{ username: data.username }, { email: data.username }],
+          [Op.or]: [{ username: data.username }, { email: data.email }],
           [Op.and]: { type: "provider" },
         },
         raw: true,
@@ -549,7 +550,7 @@ const userLogin2 = async (data) => {
       console.log("[userService] credentical");
       const user = await db.User.findOne({
         where: {
-          [Op.or]: [{ username: data.username }, { email: data.username }],
+          [Op.or]: [{ username: data.username }, { email: data.email }],
           [Op.and]: { type: "password" },
         },
         raw: true,
